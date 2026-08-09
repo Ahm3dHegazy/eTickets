@@ -47,7 +47,7 @@ namespace eTickets.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors");
+                    b.ToTable("Actors", (string)null);
                 });
 
             modelBuilder.Entity("eTickets.Models.Actor_Movie", b =>
@@ -62,7 +62,7 @@ namespace eTickets.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Actor_Movies");
+                    b.ToTable("Actor_Movies", (string)null);
                 });
 
             modelBuilder.Entity("eTickets.Models.Cinema", b =>
@@ -90,7 +90,7 @@ namespace eTickets.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinemas");
+                    b.ToTable("Cinemas", (string)null);
                 });
 
             modelBuilder.Entity("eTickets.Models.Movie", b =>
@@ -141,7 +141,7 @@ namespace eTickets.Migrations
 
                     b.HasIndex("ProducerId");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("eTickets.Models.Producer", b =>
@@ -169,7 +169,7 @@ namespace eTickets.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Producers");
+                    b.ToTable("Producers", (string)null);
                 });
 
             modelBuilder.Entity("eTickets.Models.Actor_Movie", b =>

@@ -17,6 +17,9 @@ namespace eTickets
 
             var app = builder.Build();
 
+            // Ensure DB is seeded
+            SeedData.Initialize(app.Services);
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
