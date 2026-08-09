@@ -44,11 +44,11 @@ namespace eTickets.Data
             // Seed Actors (profile pictures under wwwroot/images/actors/)
             var actors = new List<Actor>
             {
-                new Actor { FullName = "John Doe",      ProfilePictureURL = "/images/actors/john-doe.png",      Bio = "Lead actor." },
-                new Actor { FullName = "Jane Smith",    ProfilePictureURL = "/images/actors/jane-smith.png",    Bio = "Supporting actor." },
-                new Actor { FullName = "Sam Green",     ProfilePictureURL = "/images/actors/sam-green.png",     Bio = "Character actor." },
-                new Actor { FullName = "Emily White",   ProfilePictureURL = "/images/actors/emily-white.png",   Bio = "Rising star." },
-                new Actor { FullName = "Michael Brown", ProfilePictureURL = "/images/actors/michael-brown.png", Bio = "Veteran actor." }
+                new Actor { FullName = "John Doe",      ProfilePictureURL = "/images/actors/john-doe.jpeg",      Bio = "Lead actor." },
+                new Actor { FullName = "Jane Smith",    ProfilePictureURL = "/images/actors/jane-smith.jpeg",    Bio = "Supporting actor." },
+                new Actor { FullName = "Sam Green",     ProfilePictureURL = "/images/actors/sam-green.jpeg",     Bio = "Character actor." },
+                new Actor { FullName = "Emily White",   ProfilePictureURL = "/images/actors/emily-white.jpeg",   Bio = "Rising star." },
+                new Actor { FullName = "Michael Brown", ProfilePictureURL = "/images/actors/michael-brown.jpeg", Bio = "Veteran actor." }
             };
             context.Actors.AddRange(actors);
 
