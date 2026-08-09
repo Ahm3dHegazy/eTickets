@@ -20,10 +20,10 @@ namespace eTickets.Models
 
         // Cinema
         public int CinemaId { get; set; }
-        public Cinema Cinema { get; set; } = new Cinema();
+        public Cinema Cinema { get; set; } 
 
         // Producer
         public int ProducerId { get; set; }
-        public Producer Producer { get; set; } = new Producer();
+        public Producer Producer { get; set; } 
     }
 }
