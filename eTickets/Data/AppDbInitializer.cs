@@ -13,7 +13,7 @@ namespace eTickets.Data
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             // Apply migrations (if using migrations)
-            context.Database.Migrate();
+            // context.Database.Migrate();
 
             // Exit if data already seeded
             if (context.Cinemas.Any()) return;
