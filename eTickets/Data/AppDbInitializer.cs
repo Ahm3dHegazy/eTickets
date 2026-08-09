@@ -21,23 +21,22 @@ namespace eTickets.Data
             // Seed Cinemas (logos reference files under wwwroot/images/cinemas/)
             var cinemas = new List<Cinema>
             {
-                new Cinema { Name = "Cineplex One",   Logo = "/images/cinemas/cineplex-one.png", Description = "Modern cinema in downtown." },
-                new Cinema { Name = "Grand Cinema",   Logo = "/images/cinemas/grand-cinema.png", Description = "Large-screen experiences." },
-                new Cinema { Name = "Indie Theater",  Logo = "/images/cinemas/indie-theater.png", Description = "Independent films and classics." },
-                new Cinema { Name = "Movie Palace",   Logo = "/images/cinemas/movie-palace.png", Description = "Luxury cinema experience." },
-                new Cinema { Name = "Cinema World",   Logo = "/images/cinemas/cinema-world.png", Description = "World-class cinema." },
-                new Cinema { Name = "Film House",     Logo = "/images/cinemas/film-house.png", Description = "Art house cinema." },
+                new Cinema { Name = "Cineplex One",   Logo = "/images/cinemas/cineplex-one.jpeg", Description = "Modern cinema in downtown." },
+                new Cinema { Name = "Grand Cinema",   Logo = "/images/cinemas/grand-cinema.jpeg", Description = "Large-screen experiences." },
+                new Cinema { Name = "Indie Theater",  Logo = "/images/cinemas/indie-theater.jpeg", Description = "Independent films and classics." },
+                new Cinema { Name = "Movie Palace",   Logo = "/images/cinemas/movie-palace.jpeg", Description = "Luxury cinema experience." },
+                new Cinema { Name = "Cinema World",   Logo = "/images/cinemas/cinema-world.jpeg", Description = "World-class cinema." },
             };
             context.Cinemas.AddRange(cinemas);
 
             // Seed Producers (profile pictures under wwwroot/images/producers/)
             var producers = new List<Producer>
             {
-                new Producer { FullName = "Producer Alpha",   ProfilePictureURL = "/images/producers/producer-alpha.png",   Bio = "Experienced producer." },
-                new Producer { FullName = "Producer Beta",    ProfilePictureURL = "/images/producers/producer-beta.png",    Bio = "Indie producer." },
-                new Producer { FullName = "Producer Gamma",   ProfilePictureURL = "/images/producers/producer-gamma.png",   Bio = "Award-winning producer." },
-                new Producer { FullName = "Producer Delta",   ProfilePictureURL = "/images/producers/producer-delta.png",   Bio = "Documentary producer." },
-                new Producer { FullName = "Producer Epsilon", ProfilePictureURL = "/images/producers/producer-epsilon.png", Bio = "Experimental producer." }
+                new Producer { FullName = "Producer Alpha",   ProfilePictureURL = "/images/producers/producer-alpha.jpeg",   Bio = "Experienced producer." },
+                new Producer { FullName = "Producer Beta",    ProfilePictureURL = "/images/producers/producer-beta.jpeg",    Bio = "Indie producer." },
+                new Producer { FullName = "Producer Gamma",   ProfilePictureURL = "/images/producers/producer-gamma.jpeg",   Bio = "Award-winning producer." },
+                new Producer { FullName = "Producer Delta",   ProfilePictureURL = "/images/producers/producer-delta.jpeg",   Bio = "Documentary producer." },
+                new Producer { FullName = "Producer Epsilon", ProfilePictureURL = "/images/producers/producer-epsilon.jpeg", Bio = "Experimental producer." }
             };
             context.Producers.AddRange(producers);
 
@@ -62,7 +61,7 @@ namespace eTickets.Data
                     Name = "Action Blast",
                     Description = "High octane action movie.",
                     Price = 15.00,
-                    ImageURL = "/images/movies/action-blast.png",
+                    ImageURL = "/images/movies/action-blast.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
                     MovieCategory = MovieCategory.Action,
@@ -74,7 +73,7 @@ namespace eTickets.Data
                     Name = "Funny Times",
                     Description = "A comedy for the whole family.",
                     Price = 12.50,
-                    ImageURL = "/images/movies/funny-times.png",
+                    ImageURL = "/images/movies/funny-times.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
                     MovieCategory = MovieCategory.Comedy,
@@ -86,7 +85,7 @@ namespace eTickets.Data
                     Name = "Dramatic Tales",
                     Description = "A gripping drama.",
                     Price = 14.00,
-                    ImageURL = "/images/movies/dramatic-tales.png",
+                    ImageURL = "/images/movies/dramatic-tales.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
                     MovieCategory = MovieCategory.Drama,
@@ -98,7 +97,7 @@ namespace eTickets.Data
                     Name = "Documentary Insights",
                     Description = "An insightful documentary.",
                     Price = 10.00,
-                    ImageURL = "/images/movies/documentary-insights.png",
+                    ImageURL = "/images/movies/documentary-insights.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
                     MovieCategory = MovieCategory.Documentary,
