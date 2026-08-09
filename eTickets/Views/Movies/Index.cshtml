@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<Movie>
-
 @{
     ViewData["Title"] = "Movies";
 }
@@ -8,7 +7,7 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="mb-0">Movies</h2>
         <a asp-controller="Movies" asp-action="Create" class="btn btn-primary btn-lg">
-            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i> Add New Movie
+            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i> Create New Movie
         </a>
     </div>
 
@@ -42,15 +41,7 @@
                                 @preview
                             </p>
 
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="fw-bold text-success">@movie.Price.ToString("C")</span>
-                                <small class="text-muted">
-                                    <i class="bi bi-building me-1"></i>@movie.Cinema?.Name
-                                </small>
-                            </div>
-                            <small class="text-muted d-block">
-                                <i class="bi bi-camera-reels me-1"></i>@movie.Producer?.FullName
-                            </small>
+                            <span class="fw-bold text-success">@movie.Price.ToString("C")</span>
                         </div>
 
                         <div class="card-footer bg-transparent border-0 d-flex justify-content-center gap-2 pb-3">
