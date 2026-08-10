@@ -18,7 +18,7 @@ namespace eTickets.Data.Services
         }
         public async Task Add(Actor actor)
         {
-          
+            _context.Add(actor);
         }
 
         public async Task Delete(int id)
@@ -34,6 +34,11 @@ namespace eTickets.Data.Services
         public async Task Update(int id, Actor newActor)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task Save()
+        {
+            _context.SaveChanges();
         }
     }
 }

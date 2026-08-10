@@ -9,5 +9,6 @@ namespace eTickets.Data.Services
         Task Add(Actor actor);
         Task Update(int id, Actor newActor);
         Task Delete(int id);
+        Task Save();
     }
 }
