@@ -1,7 +1,5 @@
-﻿using eTickets.Data;
-using eTickets.Data.Services;
+﻿using eTickets.Data.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Controllers
 {
@@ -17,6 +15,12 @@ namespace eTickets.Controllers
         {
             var actors = await actorsService.GetAll();
             return View(actors);
+        }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
         }
     }
 }
