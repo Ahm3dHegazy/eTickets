@@ -36,3 +36,42 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* existing content kept above... */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a {
+  color: #0077cc;
+}
+
+/* new rules for dark navbar/dropdown */
+.navbar[data-bs-theme="dark"] .navbar-brand,
+.navbar[data-bs-theme="dark"] .nav-link {
+  color: rgba(255,255,255,0.9);
+}
+
+.navbar[data-bs-theme="dark"] .nav-link:hover,
+.navbar[data-bs-theme="dark"] .nav-link:focus {
+  color: #ffffff;
+}
+
+.dropdown-menu.dropdown-menu-dark {
+  /* you can tweak these colors to match your purple theme */
+  background-color: #2b2233;
+  color: rgba(255,255,255,0.95);
+}
+
+.dropdown-menu.dropdown-menu-dark .dropdown-item {
+  color: rgba(255,255,255,0.95);
+}
+
+.dropdown-menu.dropdown-menu-dark .dropdown-item:hover,
+.dropdown-menu.dropdown-menu-dark .dropdown-item:focus {
+  background-color: rgba(255,255,255,0.06);
+  color: #ffffff;
+}
