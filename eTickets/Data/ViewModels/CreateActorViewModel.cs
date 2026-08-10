@@ -4,6 +4,8 @@ namespace eTickets.Data.ViewModels
 {
     public class CreateActorViewModel
     {
+        [Display(Name = "Full Name")]
+        [StringLength(50, ErrorMessage = "Full name cannot exceed 50 characters."), MinLength(3, ErrorMessage = "Full name must be at least 3 characters long.")]
         public string FullName { get; set; }
 
         [Display(Name = "Profile Picture URL")]

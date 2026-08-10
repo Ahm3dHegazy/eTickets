@@ -1,4 +1,5 @@
-﻿using eTickets.Data.Services;
+﻿using AutoMapper;
+using eTickets.Data.Services;
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace eTickets.Controllers
     public class ActorsController : Controller
     {
         private readonly IActorsService actorsService;
+        private readonly IMapper mapper;
 
-        public ActorsController(IActorsService actorsService)
+        public ActorsController(IActorsService actorsService, IMapper mapper)
         {
             this.actorsService = actorsService;
+            this.mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
@@ -32,12 +35,8 @@ namespace eTickets.Controllers
             {
                 try
                 {
-                    Actor actor = new Actor()
-                    {
-                        FullName = viewModel.FullName,
-                        ProfilePictureURL = viewModel.ProfilePictureURL,
-                        Bio = viewModel.Bio
-                    };
+                    Actor actor = mapper.Map<Actor>(viewModel);
+
                     await actorsService.Add(actor);
 
                     await actorsService.Save();

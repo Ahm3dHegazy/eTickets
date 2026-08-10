@@ -16,6 +16,8 @@ namespace eTickets
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddAutoMapper(typeof(Program));
+
             builder.Services.AddScoped<IActorsService, ActorsService>();  // Add the ActorsService to the DI container
 
             var app = builder.Build();
