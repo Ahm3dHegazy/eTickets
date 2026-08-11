@@ -23,15 +23,18 @@ namespace eTickets.Data.Services
 
         public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var actor = await _context.Actors.FindAsync(id);
+
+            if (actor != null)
+                _context.Actors.Remove(actor);
         }
 
         public async Task<Actor?> GetByIdAsync(int id)
         {
             var actor = await _context.Actors
-                            .Include(a => a.Actor_Movies)
-                            .ThenInclude(am => am.Movie)
-                            .FirstOrDefaultAsync(a => a.Id == id);
+                .Include(a => a.Actor_Movies)
+                .ThenInclude(am => am.Movie)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
             return actor;
         }

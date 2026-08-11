@@ -56,6 +56,7 @@ namespace eTickets.Controllers
             return View(viewModel);
         }
 
+       
         public async Task<IActionResult> Details(int id)
         {
             var actor = await actorsService.GetByIdAsync(id);
@@ -78,6 +79,7 @@ namespace eTickets.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditActorViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -90,14 +92,44 @@ namespace eTickets.Controllers
                     await actorsService.SaveAsync();
 
                     return RedirectToAction(nameof(Index));
-                    
+
                 }
                 catch (Exception ex)
                 {
-                   ModelState.AddModelError("", $"Something went wrong while updating the actor: {ex.Message}");
+                    ModelState.AddModelError("", $"Something went wrong while updating the actor: {ex.Message}");
                 }
             }
             return View(viewModel);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var actor = await actorsService.GetByIdAsync(id);
+            if (actor == null)
+                return NotFound();
+
+            return View(actor);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                await actorsService.DeleteAsync(id);
+                await actorsService.SaveAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Something went wrong while deleting the actor: {ex.Message}");
+                var actor = await actorsService.GetByIdAsync(id);
+                return View("Delete", actor);
+            }
         }
     }
 
