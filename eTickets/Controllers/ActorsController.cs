@@ -62,7 +62,7 @@ namespace eTickets.Controllers
             var actor = await actorsService.GetByIdAsync(id);
 
             if (actor == null)
-                return NotFound();
+                return View("NotFound");
 
             return View(actor);
         }
@@ -72,7 +72,7 @@ namespace eTickets.Controllers
         {
             var actor = await actorsService.GetByIdAsync(id);
             if (actor == null)
-                return NotFound();
+                return View("NotFound");
 
             var viewModel = mapper.Map<EditActorViewModel>(actor);
             return View(viewModel);
@@ -108,7 +108,7 @@ namespace eTickets.Controllers
         {
             var actor = await actorsService.GetByIdAsync(id);
             if (actor == null)
-                return NotFound();
+                return View("NotFound");
 
             return View(actor);
         }
