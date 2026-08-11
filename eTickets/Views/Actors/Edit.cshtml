@@ -1,0 +1,80 @@
+﻿@model EditActorViewModel
+
+@{
+    ViewData["Title"] = "Edit actor";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header border-0 pt-4 px-4">
+                    <h3 class="mb-1">Edit Actor</h3>
+                    <p class="text-muted mb-0">Update the actor's details below.</p>
+                </div>
+
+                <div class="card-body px-4 pb-4">
+                    <form asp-action="Edit" asp-controller="Actors" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <input asp-for="Id" type="hidden" />
+
+                        </div>
+                        <div class="mb-3">
+                            <img id="ProfilePicturePreview"
+                                 class="w-50 rounded border d-none"
+                                 style="aspect-ratio: 1 / 1; object-fit: cover; object-position: top center;" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProfilePictureURL" class="form-label fw-semibold"></label>
+                            <input asp-for="ProfilePictureURL" class="form-control" placeholder="https://example.com/photo.jpeg" />
+                            <span asp-validation-for="ProfilePictureURL" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-semibold"></label>
+                            <input asp-for="FullName" class="form-control" placeholder="e.g. John Doe" />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Bio" class="form-label fw-semibold"></label>
+                            <input asp-for="Bio" class="form-control" placeholder="Short biography..." />
+                            <span asp-validation-for="Bio" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1"></i> Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function updatePreview() {
+            var preview = document.getElementById('ProfilePicturePreview');
+            var url = $("#ProfilePictureURL").val();
+            if (url) {
+                preview.src = url;
+                preview.classList.remove('d-none');
+            } else {
+                preview.classList.add('d-none');
+            }
+        }
+
+        $(document).ready(updatePreview);
+        $("#ProfilePictureURL").on("input", updatePreview);
+    </script>
+}

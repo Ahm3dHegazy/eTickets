@@ -60,10 +60,44 @@ namespace eTickets.Controllers
         {
             var actor = await actorsService.GetByIdAsync(id);
 
-            if (actor == null) 
+            if (actor == null)
                 return NotFound();
 
             return View(actor);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var actor = await actorsService.GetByIdAsync(id);
+            if (actor == null)
+                return NotFound();
+
+            var viewModel = mapper.Map<EditActorViewModel>(actor);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditActorViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var actor = mapper.Map<Actor>(viewModel);
+
+                    await actorsService.UpdateAsync(id, actor);
+                    await actorsService.SaveAsync();
+
+                    return RedirectToAction(nameof(Index));
+                    
+                }
+                catch (Exception ex)
+                {
+                   ModelState.AddModelError("", $"Something went wrong while updating the actor: {ex.Message}");
+                }
+            }
+            return View(viewModel);
         }
     }
 
