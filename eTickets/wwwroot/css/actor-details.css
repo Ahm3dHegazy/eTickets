@@ -1,0 +1,153 @@
+﻿body {
+.actor-page
+
+{
+    display: flex;
+    min-height: 80vh;
+    background-color: #0a0a12;
+    color: #e6e6f0;
+    margin: -1.5rem -12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.actor-photo-col {
+    flex: 0 0 38%;
+    position: relative;
+    min-height: 500px;
+}
+
+    .actor-photo-col img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        position: absolute;
+        inset: 0;
+    }
+
+.actor-content-col {
+    flex: 1;
+    padding: 3rem 3.5rem;
+}
+
+.breadcrumb-custom a {
+    color: #9b8cf0;
+    text-decoration: none;
+}
+
+.breadcrumb-custom span {
+    color: #5a5a6e;
+    margin: 0 0.4rem;
+}
+
+.actor-name {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 3.2rem;
+    margin: 1rem 0 0.25rem;
+    line-height: 1;
+    color: #fff;
+}
+
+.actor-subtitle {
+    color: #4dd9c0;
+    font-weight: 600;
+    padding-bottom: 0.6rem;
+    border-bottom: 3px solid #4dd9c0;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    color: #e6e6f0;
+}
+
+    .section-heading .icon-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid #6a5acd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9b8cf0;
+    }
+
+.bio-text {
+    color: #b8b8c8;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #22222e;
+}
+
+.filmography-scroll {
+    display: flex;
+    gap: 1.2rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.film-card {
+    flex: 0 0 200px;
+}
+
+    .film-card img {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .film-card .film-title {
+        font-weight: 600;
+        margin-top: 0.6rem;
+        font-size: 0.95rem;
+        color: #e6e6f0;
+    }
+
+    .film-card .film-meta {
+        font-size: 0.8rem;
+        color: #8a8a9a;
+        margin-top: 0.2rem;
+    }
+
+.film-meta .badge-year {
+    background: #2a2a3d;
+    color: #b8b8c8;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-right: 0.4rem;
+}
+
+.btn-edit-custom {
+    background: #6c4ff5;
+    border: none;
+    color: #fff;
+}
+
+    .btn-edit-custom:hover {
+        background: #5a3fe0;
+        color: #fff;
+    }
+
+.btn-showall-custom {
+    background: transparent;
+    border: 1px solid #3a3a4d;
+    color: #e6e6f0;
+}
+
+    .btn-showall-custom:hover {
+        background: #1a1a26;
+        color: #fff;
+    }
+
+}

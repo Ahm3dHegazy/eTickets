@@ -2,6 +2,7 @@
 using eTickets.Data.Services;
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Controllers
 {
@@ -17,7 +18,7 @@ namespace eTickets.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var actors = await actorsService.GetAll();
+            var actors = await actorsService.GetAllAsync();
             return View(actors);
         }
 
@@ -37,9 +38,9 @@ namespace eTickets.Controllers
                 {
                     Actor actor = mapper.Map<Actor>(viewModel);
 
-                    await actorsService.Add(actor);
+                    await actorsService.AddAsync(actor);
 
-                    await actorsService.Save();
+                    await actorsService.SaveAsync();
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -54,5 +55,16 @@ namespace eTickets.Controllers
 
             return View(viewModel);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var actor = await actorsService.GetByIdAsync(id);
+
+            if (actor == null) 
+                return NotFound();
+
+            return View(actor);
+        }
     }
+
 }

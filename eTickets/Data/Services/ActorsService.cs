@@ -12,33 +12,38 @@ namespace eTickets.Data.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Actor>> GetAll()
+        public async Task<IEnumerable<Actor>> GetAllAsync()
         {
             return await _context.Actors.ToListAsync();
         }
-        public async Task Add(Actor actor)
+        public async Task AddAsync(Actor actor)
         {
             _context.Add(actor);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Actor?> GetById(int id)
+        public async Task<Actor?> GetByIdAsync(int id)
+        {
+            var actor = await _context.Actors
+                            .Include(a => a.Actor_Movies)
+                            .ThenInclude(am => am.Movie)
+                            .FirstOrDefaultAsync(a => a.Id == id);
+
+            return actor;
+        }
+
+        public async Task UpdateAsync(int id, Actor newActor)
         {
             throw new NotImplementedException();
         }
 
-        public async Task Update(int id, Actor newActor)
+        public async Task SaveAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task Save()
-        {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
