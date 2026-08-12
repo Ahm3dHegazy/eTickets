@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using eTickets.Data;
 using eTickets.Data.Services;
+using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,5 +34,40 @@ namespace eTickets.Controllers
 
             return View(producerDetails);
         }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(CreateProducerViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Producer producer = mapper.Map<Producer>(viewModel);
+
+                    await producersService.AddAsync(producer);
+
+                    await producersService.SaveAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+
+                    ModelState.AddModelError("", "Something went wrong while adding the producer. Please try again.");
+                    return View(viewModel);
+                }
+
+            }
+
+            return View(viewModel);
+        }
+
     }
 }
