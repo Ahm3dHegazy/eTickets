@@ -19,6 +19,7 @@ namespace eTickets
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddScoped<IActorsService, ActorsService>();  // Add the ActorsService to the DI container
+            builder.Services.AddScoped<IProducersService, ProducersService>();  // Add the ProducersService to the DI container
 
             var app = builder.Build();
 

@@ -1,4 +1,6 @@
-﻿using eTickets.Data;
+﻿using AutoMapper;
+using eTickets.Data;
+using eTickets.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,16 +8,17 @@ namespace eTickets.Controllers
 {
     public class ProducersController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IProducersService producersService;
+        private readonly IMapper mapper;
 
-        // inject the AppDbContext into the controller
-        public ProducersController(AppDbContext context)
+        public ProducersController(IProducersService producersService,IMapper mapper )
         {
-            _context = context;
+            this.producersService = producersService;
+            this.mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
-            var producers = await _context.Producers.ToListAsync();
+            var producers = await producersService.GetAllAsync();
             return View(producers);
         }
     }
