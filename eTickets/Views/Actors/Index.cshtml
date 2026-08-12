@@ -7,6 +7,16 @@
 
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="mb-0">Actors</h2>
+        @* @if (TempData["SuccessMessage"] != null)
+        {
+            <div id="successAlert"
+                 class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 py-2 px-3 shadow"
+                 style="z-index: 1055; font-size: 0.9rem;"
+                 role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+                <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        } *@
 
     </div>
 

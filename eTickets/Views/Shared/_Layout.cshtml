@@ -53,6 +53,26 @@
             </div>
         </nav>
     </header>
+
+    @* put this inside <body>, e.g. under the navbar *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="statusAlert"
+             class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 py-2 px-3 shadow"
+             style="z-index: 1055; font-size: 0.9rem;"
+             role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+        </div>
+
+        <script>
+                setTimeout(function() {
+                    var a = document.getElementById('statusAlert');
+                    if (!a) return;
+                    a.classList.remove('show');
+                    setTimeout(function() { a.remove(); }, 200);
+                }, 2000);
+        </script>
+    }
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

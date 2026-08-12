@@ -41,6 +41,7 @@ namespace eTickets.Controllers
 
                     await actorsService.SaveAsync();
 
+                    TempData["SuccessMessage"] = $"{actor.FullName} was added successfully.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception)
@@ -90,6 +91,7 @@ namespace eTickets.Controllers
                     await actorsService.UpdateAsync(id, actor);
                     await actorsService.SaveAsync();
 
+                    TempData["SuccessMessage"] = $"Actor updated successfully.";
                     return RedirectToAction(nameof(Index));
 
                 }
@@ -118,9 +120,13 @@ namespace eTickets.Controllers
         {
             try
             {
+                var actor = await actorsService.GetByIdAsync(id);
+                var name = actor?.FullName ?? "Actor";
+
                 await actorsService.DeleteAsync(id);
                 await actorsService.SaveAsync();
 
+                TempData["SuccessMessage"] = $"{name} was deleted successfully.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
