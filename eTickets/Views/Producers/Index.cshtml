@@ -10,25 +10,25 @@
 
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info">No actors found.</div>
+        <div class="alert alert-info">No Producers found.</div>
     }
     else
     {
         <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-4">
-            @foreach (var actor in Model)
+            @foreach (var producer in Model)
             {
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
-                        <img src="@(string.IsNullOrEmpty(actor.ProfilePictureURL) ? Url.Content("~/images/actors/placeholder.png") : actor.ProfilePictureURL)"
-                             alt="@actor.FullName"
+                        <img src="@(string.IsNullOrEmpty(producer.ProfilePictureURL) ? Url.Content("~/images/Producers/placeholder.png") : producer.ProfilePictureURL)"
+                             alt="@producer.FullName"
                              class="card-img-top"
-                             style="height:220px;object-fit:cover;" />
+                             style="height:220px;object-fit:cover;object-position:top center;" />
 
                         <div class="card-body text-center">
-                            <h6 class="card-title mb-1">@actor.FullName</h6>
+                            <h6 class="card-title mb-1">@producer.FullName</h6>
                             <p class="text-muted small mb-2" style="min-height:2.4rem;">
                                 @{
-                                    var bio = actor.Bio ?? "";
+                                    var bio = producer.Bio ?? "";
                                     var preview = bio.Length > 60 ? bio.Substring(0, 60) + "…" : bio;
                                 }
                                 @preview
@@ -36,13 +36,13 @@
                         </div>
 
                         <div class="card-footer bg-transparent border-0 d-flex justify-content-center gap-2 pb-3">
-                            <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.Id" class="btn btn-outline-secondary btn-sm">
+                            <a asp-controller="Producers" asp-action="Details" asp-route-id="@producer.Id" class="btn btn-outline-secondary btn-sm">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
-                            <a asp-controller="Actors" asp-action="Edit" asp-route-id="@actor.Id" class="btn btn-outline-primary btn-sm">
+                            <a asp-controller="Producers" asp-action="Edit" asp-route-id="@producer.Id" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-                            <form asp-controller="Actors" asp-action="Delete" asp-route-id="@actor.Id" method="post" class="m-0" onsubmit="return confirm('Are you sure you want to delete this actor?');">
+                            <form asp-controller="Producers" asp-action="Delete" asp-route-id="@producer.Id" method="post" class="m-0" onsubmit="return confirm('Are you sure you want to delete this producer?');">
                                 <button type="submit" class="btn btn-outline-danger btn-sm">
                                     <i class="bi bi-trash-fill"></i>
                                 </button>
