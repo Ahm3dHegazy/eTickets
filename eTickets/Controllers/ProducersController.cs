@@ -55,6 +55,7 @@ namespace eTickets.Controllers
 
                     await producersService.SaveAsync();
 
+                    TempData["SuccessMessage"] = $"{producer.FullName} added successfully!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception)
@@ -66,6 +67,42 @@ namespace eTickets.Controllers
 
             }
 
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var producer = await producersService.GetByIdAsync(id);
+            if (producer == null)
+                return View("NotFound");
+
+            var viewModel = mapper.Map<EditProducerViewModel>(producer);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditProducerViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var producer = mapper.Map<Producer>(viewModel);
+
+                    await producersService.UpdateAsync(id, producer);
+                    await producersService.SaveAsync();
+
+                    TempData["SuccessMessage"] = $"Producer updated successfully.";
+                    return RedirectToAction(nameof(Index));
+
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Something went wrong while updating the producer: {ex.Message}");
+                }
+            }
             return View(viewModel);
         }
 

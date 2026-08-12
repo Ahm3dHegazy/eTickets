@@ -8,9 +8,14 @@ namespace eTickets.Mapping
         public AutoMapperProfile()
         {
             CreateMap<CreateActorViewModel, Actor>();
+
             CreateMap<EditActorViewModel, Actor>();
             CreateMap<Actor, EditActorViewModel>();
+
             CreateMap<CreateProducerViewModel, Producer>();
+
+            CreateMap<EditProducerViewModel, Producer>();
+            CreateMap<Producer, EditProducerViewModel>();
         }
     }
 }
