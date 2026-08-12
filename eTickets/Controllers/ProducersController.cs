@@ -16,10 +16,22 @@ namespace eTickets.Controllers
             this.producersService = producersService;
             this.mapper = mapper;
         }
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var producers = await producersService.GetAllAsync();
             return View(producers);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var producerDetails = await producersService.GetByIdAsync(id);
+
+            if (producerDetails == null) 
+                return View("NotFound");
+
+            return View(producerDetails);
         }
     }
 }
