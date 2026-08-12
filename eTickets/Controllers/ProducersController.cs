@@ -106,5 +106,39 @@ namespace eTickets.Controllers
             return View(viewModel);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var producer = await producersService.GetByIdAsync(id);
+            if (producer == null)
+                return View("NotFound");
+
+            return View(producer);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var producer = await producersService.GetByIdAsync(id);
+                var name = producer?.FullName ?? "Producer";
+
+                await producersService.DeleteAsync(id);
+                await producersService.SaveAsync();
+
+                TempData["SuccessMessage"] = $"{name} was deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Something went wrong while deleting the producer: {ex.Message}");
+                var producer = await producersService.GetByIdAsync(id);
+                return View("Delete", producer);
+            }
+        }
+
     }
 }
