@@ -6,9 +6,6 @@
 <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="mb-0">Producers</h2>
-        <a asp-controller="Producers" asp-action="Create" class="btn btn-primary btn-lg">
-            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i> Add New Producer
-        </a>
     </div>
 
     @if (Model == null || !Model.Any())
@@ -56,4 +53,9 @@
             }
         </div>
     }
+    <div class="d-flex justify-content-end mt-4">
+        <a asp-controller="Producers" asp-action="Add" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i> Add New Producer
+        </a>
+    </div>
 </div>
