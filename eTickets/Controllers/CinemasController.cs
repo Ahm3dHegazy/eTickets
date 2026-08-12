@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using eTickets.Data;
 using eTickets.Data.Services;
+using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,41 @@ namespace eTickets.Controllers
             var cinemas = await cinemasService.GetAllAsync();
 
             return View(cinemas);
+        }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(CreateCinemaViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Cinema cinema = mapper.Map<Cinema>(viewModel);
+
+                    await cinemasService.AddAsync(cinema);
+
+                    await cinemasService.SaveAsync();
+
+                    TempData["SuccessMessage"] = $"{cinema.Name} was added successfully.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+
+                    ModelState.AddModelError("", "Something went wrong while adding the cinema. Please try again.");
+                    return View(viewModel);
+                }
+
+            }
+
+            return View(viewModel);
         }
     }
 }

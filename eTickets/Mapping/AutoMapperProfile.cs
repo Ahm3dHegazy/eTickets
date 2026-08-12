@@ -16,6 +16,8 @@ namespace eTickets.Mapping
 
             CreateMap<EditProducerViewModel, Producer>();
             CreateMap<Producer, EditProducerViewModel>();
+
+            CreateMap<CreateCinemaViewModel, Cinema>();
         }
     }
 }
