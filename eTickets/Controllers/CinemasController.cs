@@ -58,5 +58,15 @@ namespace eTickets.Controllers
 
             return View(viewModel);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var cinema = await cinemasService.GetByIdAsync(id);
+
+            if (cinema == null)
+                return View("NotFound");
+
+            return View(cinema);
+        }
     }
 }

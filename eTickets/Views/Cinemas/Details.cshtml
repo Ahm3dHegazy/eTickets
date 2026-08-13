@@ -1,0 +1,71 @@
+﻿@model Cinema
+@{
+    ViewData["Title"] = $"{Model.Name} - Cinema Details";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/actor-details.css" />
+}
+
+
+<div class="actor-page">
+    <div class="actor-photo-col">
+        <img src="@(string.IsNullOrEmpty(Model.Logo) ? Url.Content("~/images/actors/placeholder.png") : Model.Logo)"
+             alt="@Model.Name" />
+    </div>
+
+    <div class="actor-content-col">
+        <div class="breadcrumb-custom mb-2">
+            <a asp-controller="Home" asp-action="Index"><i class="bi bi-house-door-fill"></i></a>
+            <span>/</span>
+            <a asp-controller="Cinemas" asp-action="Index">Cinemas</a>
+            <span>/</span>
+            <span class="text-white">@Model.Name</span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-start flex-wrap">
+            <div>
+                <h1 class="actor-name">@Model.Name</h1>
+                <div class="actor-subtitle">Cinema Profile</div>
+            </div>
+            <div class="d-flex gap-2 mt-2">
+                <a asp-controller="Cinemas" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-edit-custom px-3">
+                    <i class="bi bi-pencil-fill me-1"></i> Edit
+                </a>
+                <a asp-controller="Cinemas" asp-action="Index" class="btn btn-showall-custom px-3">
+                    <i class="bi bi-list-ul me-1"></i> Show All
+                </a>
+            </div>
+        </div>
+
+        <div class="section-heading">
+            <span class="icon-circle"><i class="bi bi-person-fill"></i></span>
+            BIOGRAPHY
+        </div>
+        <p class="bio-text">
+            @(string.IsNullOrEmpty(Model.Description) ? "No biography available." : Model.Description)
+        </p>
+
+        @if (Model.Movies != null && Model.Movies.Any())
+        {
+            <div class="section-heading">
+                <span class="icon-circle"><i class="bi bi-film"></i></span>
+                FILMOGRAPHY
+            </div>
+            <div class="filmography-scroll">
+                @foreach (var am in Model.Movies)
+                {
+                    <div class="film-card">
+                        <img src="@(string.IsNullOrEmpty(am.ImageURL) ? Url.Content("~/images/movies/placeholder.jpeg") : am.ImageURL)"
+                             alt="@am.Name" />
+                        <div class="film-title">@am.Name</div>
+                        <div class="film-meta">
+                            <span class="badge-year">@am.StartDate.Year</span>
+                            @am.MovieCategory
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
