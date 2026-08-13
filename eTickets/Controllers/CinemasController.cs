@@ -68,5 +68,42 @@ namespace eTickets.Controllers
 
             return View(cinema);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var cinema = await cinemasService.GetByIdAsync(id);
+            if (cinema == null)
+                return View("NotFound");
+
+            var viewModel = mapper.Map<EditCinemaViewModel>(cinema);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditCinemaViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var cinema = mapper.Map<Cinema>(viewModel);
+
+                    await cinemasService.UpdateAsync(id, cinema);
+                    await cinemasService.SaveAsync();
+
+                    TempData["SuccessMessage"] = $"Cinema updated successfully.";
+                    return RedirectToAction(nameof(Index));
+
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Something went wrong while updating the cinema: {ex.Message}");
+                }
+            }
+            return View(viewModel);
+        }
+
     }
 }
