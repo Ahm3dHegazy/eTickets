@@ -105,5 +105,38 @@ namespace eTickets.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var cinema = await cinemasService.GetByIdAsync(id);
+            if (cinema == null)
+                return View("NotFound");
+
+            return View(cinema);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var cinema = await cinemasService.GetByIdAsync(id);
+                var name = cinema?.Name ?? "Cinema";
+
+                await cinemasService.DeleteAsync(id);
+                await cinemasService.SaveAsync();
+
+                TempData["SuccessMessage"] = $"{name} was deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Something went wrong while deleting the cinema: {ex.Message}");
+                var cinema = await cinemasService.GetByIdAsync(id);
+                return View("Delete", cinema);
+            }
+        }
+
     }
 }

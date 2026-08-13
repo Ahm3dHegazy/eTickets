@@ -45,11 +45,12 @@
                             <a asp-controller="Cinemas" asp-action="Edit" asp-route-id="@cinema.Id" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-                            <form asp-controller="Cinemas" asp-action="Delete" asp-route-id="@cinema.Id" method="post" class="m-0" onsubmit="return confirm('Are you sure you want to delete this cinema?');">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </form>
+                            <a asp-controller="Cinemas"
+                               asp-action="Delete"
+                               asp-route-id="@cinema.Id"
+                               class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
                         </div>
                     </div>
                 </div>

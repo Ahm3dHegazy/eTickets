@@ -20,7 +20,7 @@ namespace eTickets.Data.Configurations
             builder.HasOne(m => m.Cinema)
                    .WithMany(c => c.Movies)
                    .HasForeignKey(m => m.CinemaId)
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(m => m.Producer)
                    .WithMany(p => p.Movies)
