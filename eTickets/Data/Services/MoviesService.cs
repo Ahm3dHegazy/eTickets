@@ -13,6 +13,7 @@ namespace eTickets.Data.Services
             this.context = context;
         }
 
+        // Get all movies with their related Cinema and Producer data
         public new async Task<IEnumerable<Movie>> GetAllAsync()
         {
             var movies = await context.Movies
