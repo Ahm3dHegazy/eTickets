@@ -3,7 +3,9 @@ using eTickets.Models;
 
 namespace eTickets.Data.Services
 {
-    public interface IActorMoviesService:IEntityBaseRepository<Actor_Movie>
+    public interface IActorMoviesService
     {
+         Task AddAsync(Actor_Movie entity);
+         Task SaveAsync();
     }
 }
