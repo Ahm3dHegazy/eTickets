@@ -2,7 +2,7 @@
 using eTickets.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Data.ViewModels
+namespace eTickets.web.ViewModels
 {
     public class CreateMovieViewModel
     {

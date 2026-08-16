@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="eTickets/eTickets.csproj" />
+  <Project Path="eTickets.Business/eTickets.Business.csproj" Id="f306baf1-d297-4a28-bccc-3d3f7d0593ea" />
+  <Project Path="eTickets.Data/eTickets.Data.csproj" Id="7bb67107-d986-46d4-9a36-ff83d87ef36d" />
+  <Project Path="eTickets/eTickets.web.csproj" />
 </Solution>

@@ -1,4 +1,5 @@
-﻿using eTickets.Data.Base;
+﻿using eTickets.Business.Interfaces;
+using eTickets.Data.Base;
 using eTickets.Models;
 using Microsoft.EntityFrameworkCore;
 

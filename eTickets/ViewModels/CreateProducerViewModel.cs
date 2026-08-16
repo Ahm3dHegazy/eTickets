@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Data.ViewModels
+namespace eTickets.web.ViewModels
 {
-    public class EditProducerViewModel
+    public class CreateProducerViewModel
     {
-        [Key]
-        public int Id { get; set; }
-
         [Display(Name = "Full Name")]
         [StringLength(50, ErrorMessage = "Full name cannot exceed 50 characters."), MinLength(3, ErrorMessage = "Full name must be at least 3 characters long.")]
         public string FullName { get; set; }

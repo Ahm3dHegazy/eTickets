@@ -18,4 +18,8 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\eTickets.Business\eTickets.Business.csproj" />
+	</ItemGroup>
+
 </Project>

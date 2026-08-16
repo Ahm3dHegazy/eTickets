@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using eTickets.Data.Services;
+using eTickets.Business.Interfaces;
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 

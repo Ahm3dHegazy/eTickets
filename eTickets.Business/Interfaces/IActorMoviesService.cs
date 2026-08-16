@@ -1,7 +1,7 @@
 ﻿using eTickets.Data.Base;
 using eTickets.Models;
 
-namespace eTickets.Data.Services
+namespace eTickets.Business.Interfaces
 {
     public interface IActorMoviesService
     {

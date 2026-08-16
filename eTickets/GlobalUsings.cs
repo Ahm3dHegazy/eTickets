@@ -1,1 +1,2 @@
-﻿global using eTickets.Data.ViewModels;
+﻿global using eTickets.web.ViewModels;
+global using eTickets.Data.Enums;

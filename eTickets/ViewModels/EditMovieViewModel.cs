@@ -3,7 +3,7 @@ using eTickets.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace eTickets.Data.ViewModels
+namespace eTickets.web.ViewModels
 {
     public class EditMovieViewModel
     {
