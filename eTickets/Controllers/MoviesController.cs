@@ -107,5 +107,62 @@ namespace eTickets.Controllers
             ViewData["SearchQuery"] = query;
             return View(results);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var movie = await moviesService.GetByIdAsync(id);
+            if (movie == null)
+                return View("NotFound");
+
+            var viewModel = mapper.Map<EditMovieViewModel>(movie);
+
+            viewModel.Cinemas = await cinemasService.GetAllAsync();
+            viewModel.Producers = await producersService.GetAllAsync();
+            viewModel.Actors = await actorsService.GetAllAsync();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditMovieViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var movie = mapper.Map<Movie>(viewModel);
+                    await moviesService.UpdateAsync(id, movie);
+                    await moviesService.SaveAsync();
+
+                    await actorMoviesService.DeleteByMovieIdAsync(id);
+                    if (viewModel.SelectedActorIds != null && viewModel.SelectedActorIds.Any())
+                    {
+                        foreach (var actorId in viewModel.SelectedActorIds)
+                        {
+                            await actorMoviesService.AddAsync(new Actor_Movie
+                            {
+                                MovieId = id,
+                                ActorId = actorId
+                            });
+                        }
+                    }
+                    await actorMoviesService.SaveAsync();
+
+                    TempData["SuccessMessage"] = "Movie updated successfully.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Something went wrong while updating the movie: {ex.Message}");
+                }
+            }
+
+            viewModel.Cinemas = await cinemasService.GetAllAsync();
+            viewModel.Producers = await producersService.GetAllAsync();
+            viewModel.Actors = await actorsService.GetAllAsync();
+            return View(viewModel);
+        }
     }
 }

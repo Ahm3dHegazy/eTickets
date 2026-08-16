@@ -7,5 +7,6 @@ namespace eTickets.Data.Services
     {
          Task AddAsync(Actor_Movie entity);
          Task SaveAsync();
+        Task DeleteByMovieIdAsync(int movieId);
     }
 }

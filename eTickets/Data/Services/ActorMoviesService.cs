@@ -21,5 +21,11 @@ namespace eTickets.Data.Services
         {
             await context.SaveChangesAsync();
         }
+
+        public async Task DeleteByMovieIdAsync(int movieId)
+        {
+            var existing = context.Set<Actor_Movie>().Where(am => am.MovieId == movieId);
+            context.Set<Actor_Movie>().RemoveRange(existing);
+        }
     }
 }
