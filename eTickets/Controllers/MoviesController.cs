@@ -94,5 +94,18 @@ namespace eTickets.Controllers
             }
             return View(movie);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string query)
+        {
+            var allMovies = await moviesService.GetAllAsync();
+
+            var results = string.IsNullOrWhiteSpace(query)
+                ? new List<Movie>()
+                : allMovies.Where(m => m.Name.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            ViewData["SearchQuery"] = query;
+            return View(results);
+        }
     }
 }

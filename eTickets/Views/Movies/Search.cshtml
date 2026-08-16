@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Movie>
+@{
+    ViewData["Title"] = "Search Results";
+    var query = ViewData["SearchQuery"] as string;
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">
+        Search Results
+        @if (!string.IsNullOrWhiteSpace(query))
+        {
+            <span class="text-muted fs-5">for "@query"</span>
+        }
+    </h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            @if (string.IsNullOrWhiteSpace(query))
+            {
+                <text>Type something in the search box to find a movie.</text>
+            }
+            else
+            {
+                <text>No movies found matching "@query".</text>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var movie in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
+                        <div class="position-absolute top-0 start-0 end-0 m-2 d-flex justify-content-between">
+                            @if (DateTime.Now < movie.StartDate)
+                            {
+                                <span class="badge bg-primary text-white">UPCOMING</span>
+                            }
+                            else if (DateTime.Now >= movie.StartDate && DateTime.Now <= movie.EndDate)
+                            {
+                                <span class="badge bg-success text-white">AVAILABLE</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary text-white">ENDED</span>
+                            }
+
+                            <span class="badge bg-primary">@movie.MovieCategory</span>
+                        </div>
+
+                        <img src="@(string.IsNullOrEmpty(movie.ImageURL) ? Url.Content("~/images/movies/placeholder.png") : movie.ImageURL)"
+                             alt="@movie.Name"
+                             class="card-img-top"
+                             style="height:280px;object-fit:cover;" />
+
+                        <div class="card-body">
+                            <h6 class="card-title mb-1">@movie.Name</h6>
+                            <p class="text-muted small mb-2">
+                                @{
+                                    var desc = movie.Description ?? "";
+                                    var preview = desc.Length > 70 ? desc.Substring(0, 70) + "…" : desc;
+                                }
+                                @preview
+                            </p>
+                            <span class="fw-bold text-success fs-5">@movie.Price.ToString("C")</span>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-0 d-flex justify-content-center gap-2 pb-3">
+                            <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
