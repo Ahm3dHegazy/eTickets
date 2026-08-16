@@ -426,4 +426,15 @@
     .d-flex.justify-content-between {
         gap: 20px;
     }
+    .cast-bio {
+        margin: 0;
+        color: #9fa8ba;
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 360px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 }

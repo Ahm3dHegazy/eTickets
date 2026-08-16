@@ -1,106 +1,246 @@
 ﻿@model IEnumerable<Movie>
+
 @{
     ViewData["Title"] = "Movies";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/movies-index.css" />
+}
+
 <div class="container py-4">
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <h2 class="mb-0">Movies</h2>
-        <a asp-controller="Movies" asp-action="Add" class="btn btn-primary btn-lg">
-            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i> Add New Movie
+
+     <div class="movies-header">
+
+        <h2 class="movies-title">
+            Movies
+        </h2>
+
+        <a asp-controller="Movies"
+           asp-action="Add"
+           class="btn-add-movie">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Add New Movie
+
         </a>
+
     </div>
 
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info">No movies found.</div>
+        <div class="alert alert-info">
+            No movies found.
+        </div>
     }
     else
     {
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
             @foreach (var movie in Model)
             {
                 <div class="col">
-                    <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
-                        <div class="position-absolute top-0 start-0 end-0 m-2 d-flex justify-content-between">
+
+                    <div class="movie-card">
+
+                        
+                        <div class="movie-poster">
+
+                            <img src="@(string.IsNullOrEmpty(movie.ImageURL)
+                                                            ? Url.Content("~/images/movies/placeholder.png")
+                                                            : movie.ImageURL)"
+                                 alt="@movie.Name" />
+
+
+                            
                             @if (DateTime.Now < movie.StartDate)
                             {
-                                <span class="badge bg-primary text-white">UPCOMING</span>
+                                <span class="movie-status status-upcoming">
+                                    UPCOMING
+                                </span>
                             }
-                            else if (DateTime.Now >= movie.StartDate && DateTime.Now <= movie.EndDate)
+                            else if (DateTime.Now <= movie.EndDate)
                             {
-                                <span class="badge bg-success text-white">AVAILABLE</span>
+                                <span class="movie-status status-available">
+                                    AVAILABLE
+                                </span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary text-white">ENDED</span>
+                                <span class="movie-status status-ended">
+                                    ENDED
+                                </span>
                             }
 
-                            @* <span class="badge bg-primary">
-                                @movie.MovieCategory
-                            </span> *@
                         </div>
 
-                        <img src="@(string.IsNullOrEmpty(movie.ImageURL) ? Url.Content("~/images/movies/placeholder.png") : movie.ImageURL)"
-                             alt="@movie.Name"
-                             class="card-img-top"
-                             style="height:280px;object-fit:cover;" />
 
-                        <div class="card-body">
-                            <h5 class="card-title mb-1">@movie.Name</h5>
+                        
+                        <div class="movie-card-body">
 
-                            <p class="text-muted small mb-2">
+                            
+                            <h5 class="movie-name">
+                                @movie.Name
+                            </h5>
+
+
+                           
+                            <div class="movie-category">
+                                @movie.MovieCategory
+                            </div>
+
+
+                          
+                            <p class="movie-description">
+
                                 @{
                                     var desc = movie.Description ?? "";
-                                    var preview = desc.Length > 90 ? desc.Substring(0, 90) + "…" : desc;
+
+                                    var preview = desc.Length > 90
+                                        ? desc.Substring(0, 90) + "…"
+                                        : desc;
                                 }
-                                @preview
+
+                                @(string.IsNullOrWhiteSpace(preview)
+                                    ? "No description available."
+                                    : preview)
+
                             </p>
 
-                            <ul class="list-unstyled small mb-2">
-                                <li class="mb-1">
-                                    
-                                    <strong>Cinema:</strong> @(movie.Cinema?.Name ?? "N/A")
-                                </li>
-                                <li class="mb-1">
-                                    
-                                    <strong>Producer:</strong> @(movie.Producer?.FullName ?? "N/A")
-                                </li>
-                                <li class="mb-1">
 
-                                    <strong>Starts:</strong> @movie.StartDate.ToString("MMM dd, yyyy")
-                                </li>
-                                <li class="mb-1">
-                                     
-                                    <strong>Ends:</strong> @movie.EndDate.ToString("MMM dd, yyyy")
-                                </li>
-                            </ul>
+                             
+                            <div class="movie-info">
 
-                            <span class="fw-bold text-success fs-5">@movie.Price.ToString("C")</span>
-                        </div>
+                                 
+                                <div class="movie-info-item">
 
-                        <div class="card-footer bg-transparent border-0 pb-3">
-                            <a asp-controller="Cart" asp-action="Add" asp-route-id="@movie.Id" class="btn btn-success w-100 mb-2">
-                                <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    <i class="bi bi-building"></i>
+
+                                    <span>
+                                        <strong>Cinema:</strong>
+                                        @(movie.Cinema?.Name ?? "N/A")
+                                    </span>
+
+                                </div>
+
+
+                                
+                                <div class="movie-info-item">
+
+                                    <i class="bi bi-person"></i>
+
+                                    <span>
+                                        <strong>Producer:</strong>
+                                        @(movie.Producer?.FullName ?? "N/A")
+                                    </span>
+
+                                </div>
+
+
+                                 
+                                <div class="movie-info-item">
+
+                                    <i class="bi bi-calendar-event"></i>
+
+                                    <span>
+                                        <strong>Starts:</strong>
+                                        @movie.StartDate.ToString("MMM dd, yyyy")
+                                    </span>
+
+                                </div>
+
+
+                                 
+                                <div class="movie-info-item">
+
+                                    <i class="bi bi-calendar-event"></i>
+
+                                    <span>
+                                        <strong>Ends:</strong>
+                                        @movie.EndDate.ToString("MMM dd, yyyy")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                             
+                            <div class="movie-price">
+
+                                @movie.Price.ToString("C")
+
+                            </div>
+
+
+                             
+                            <a asp-controller="Cart"
+                               asp-action="Add"
+                               asp-route-id="@movie.Id"
+                               class="btn-add-cart">
+
+                                <i class="bi bi-cart-plus"></i>
+
+                                Add to Cart
+
                             </a>
 
-                            <div class="d-flex justify-content-center gap-2">
-                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-outline-secondary btn-sm">
+
+                             
+                            <div class="movie-actions">
+
+                                
+                                <a asp-controller="Movies"
+                                   asp-action="Details"
+                                   asp-route-id="@movie.Id"
+                                   class="movie-action view"
+                                   title="View Details">
+
                                     <i class="bi bi-eye-fill"></i>
+
                                 </a>
-                                <a asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-outline-primary btn-sm">
+
+
+                                <a asp-controller="Movies"
+                                   asp-action="Edit"
+                                   asp-route-id="@movie.Id"
+                                   class="movie-action edit"
+                                   title="Edit Movie">
+
                                     <i class="bi bi-pencil-fill"></i>
+
                                 </a>
-                                <form asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" method="post" class="m-0" onsubmit="return confirm('Are you sure you want to delete this movie?');">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+
+
+                                <!-- Delete -->
+                                <form asp-controller="Movies"
+                                      asp-action="Delete"
+                                      asp-route-id="@movie.Id"
+                                      method="post"
+                                      class="m-0"
+                                      onsubmit="return confirm('Are you sure you want to delete this movie?');">
+
+                                    <button type="submit"
+                                            class="movie-action delete"
+                                            title="Delete Movie">
+
                                         <i class="bi bi-trash-fill"></i>
+
                                     </button>
+
                                 </form>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
             }
+
         </div>
     }
+
 </div>
