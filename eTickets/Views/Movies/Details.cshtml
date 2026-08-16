@@ -1,0 +1,277 @@
+﻿@model Movie
+
+@{
+    ViewData["Title"] = $"{Model.Name} - Movie Details";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/movie-details.css" />
+}
+
+<div class="movie-page">
+
+    <!-- Movie Poster -->
+    <div class="movie-photo-col">
+        <img src="@(string.IsNullOrEmpty(Model.ImageURL)
+                            ? Url.Content("~/images/movies/placeholder.png")
+                            : Model.ImageURL)"
+             alt="@Model.Name" />
+    </div>
+
+    <!-- Movie Content -->
+    <div class="movie-content-col">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-custom mb-2">
+            <a asp-controller="Home" asp-action="Index">
+                <i class="bi bi-house-door-fill"></i>
+            </a>
+
+            <span>/</span>
+
+            <a asp-controller="Movies" asp-action="Index">
+                Movies
+            </a>
+
+            <span>/</span>
+
+            <span class="text-white">
+                @Model.Name
+            </span>
+        </div>
+
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-start flex-wrap">
+
+            <div>
+                <h1 class="movie-name">
+                    @Model.Name
+                </h1>
+
+                <div class="movie-subtitle">
+                    @Model.MovieCategory
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-2">
+
+                <a asp-controller="Movies"
+                   asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-edit-custom px-3">
+
+                    <i class="bi bi-pencil-fill me-1"></i>
+                    Edit
+                </a>
+
+                <a asp-controller="Movies"
+                   asp-action="Index"
+                   class="btn btn-showall-custom px-3">
+
+                    <i class="bi bi-list-ul me-1"></i>
+                    Show All
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Description -->
+        <div class="section-heading">
+
+            <span class="icon-circle">
+                <i class="bi bi-film"></i>
+            </span>
+
+            DESCRIPTION
+
+        </div>
+
+        <p class="description-text">
+
+            @(string.IsNullOrWhiteSpace(Model.Description)
+                ? "No description available."
+                : Model.Description)
+
+        </p>
+
+
+        <!-- Movie Details -->
+        <div class="section-heading">
+
+            <span class="icon-circle">
+                <i class="bi bi-info-circle-fill"></i>
+            </span>
+
+            DETAILS
+
+        </div>
+
+
+        <div class="movie-details-grid">
+
+            <!-- Price -->
+            <div class="movie-detail-item">
+
+                <div class="detail-label">
+                    PRICE
+                </div>
+
+                <div class="detail-value">
+                    @Model.Price.ToString("C")
+                </div>
+
+            </div>
+
+
+            <!-- Start Date -->
+            <div class="movie-detail-item">
+
+                <div class="detail-label">
+                    START DATE
+                </div>
+
+                <div class="detail-value">
+                    @Model.StartDate.ToString("MMM dd, yyyy")
+                </div>
+
+            </div>
+
+
+            <!-- End Date -->
+            <div class="movie-detail-item">
+
+                <div class="detail-label">
+                    END DATE
+                </div>
+
+                <div class="detail-value">
+                    @Model.EndDate.ToString("MMM dd, yyyy")
+                </div>
+
+            </div>
+
+
+            <!-- Cinema -->
+            <div class="movie-detail-item">
+
+                <div class="detail-label">
+                    CINEMA
+                </div>
+
+                @if (Model.Cinema != null)
+                {
+                    <a asp-controller="Cinemas"
+                       asp-action="Details"
+                       asp-route-id="@Model.CinemaId"
+                       class="detail-link">
+
+                        @Model.Cinema.Name
+
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">
+                        N/A
+                    </span>
+                }
+
+            </div>
+
+
+            <!-- Producer -->
+            <div class="movie-detail-item">
+
+                <div class="detail-label">
+                    PRODUCER
+                </div>
+
+                @if (Model.Producer != null)
+                {
+                    <a asp-controller="Producers"
+                       asp-action="Details"
+                       asp-route-id="@Model.ProducerId"
+                       class="detail-link">
+
+                        @Model.Producer.FullName
+
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">
+                        N/A
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- Cast -->
+        @if (Model.Actor_Movies != null &&
+             Model.Actor_Movies.Any())
+        {
+            <div class="section-heading">
+
+                <span class="icon-circle">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+
+                CAST
+
+            </div>
+
+
+            <div class="cast-grid">
+
+                @foreach (var am in Model.Actor_Movies)
+                {
+                    <a asp-controller="Actors"
+                       asp-action="Details"
+                       asp-route-id="@am.ActorId"
+                       class="cast-card text-decoration-none">
+
+                        <img src="@(string.IsNullOrEmpty(am.Actor?.ProfilePictureURL)
+                                                            ? Url.Content("~/images/actors/placeholder.png")
+                                                            : am.Actor.ProfilePictureURL)"
+                             alt="@am.Actor?.FullName" />
+
+                        <div class="cast-info">
+
+                            <div class="cast-name">
+                                @am.Actor?.FullName
+                            </div>
+
+                            <div class="cast-role">
+                                Actor
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(am.Actor?.Bio))
+                            {
+                                <p class="cast-bio">
+                                    @am.Actor.Bio
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="cast-bio text-muted">
+                                    No biography available.
+                                </p>
+                            }
+
+                        </div>
+
+                    </a>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>

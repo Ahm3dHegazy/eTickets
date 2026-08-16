@@ -23,5 +23,17 @@ namespace eTickets.Data.Services
 
             return movies;
         }
+
+        public new async Task<Movie?> GetByIdAsync(int id)
+        {
+            var movie = await context.Movies
+                .Include(m => m.Cinema)
+                .Include(m => m.Producer)
+                .Include(m => m.Actor_Movies)
+                .ThenInclude(am => am.Actor)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            return movie;
+        }
     }
 }

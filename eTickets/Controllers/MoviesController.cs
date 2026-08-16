@@ -83,5 +83,16 @@ namespace eTickets.Controllers
             viewModel.Actors = await actorsService.GetAllAsync();
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var movie = await moviesService.GetByIdAsync(id);
+            if (movie == null)
+            {
+                return View("NotFound");
+            }
+            return View(movie);
+        }
     }
 }
