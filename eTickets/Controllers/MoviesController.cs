@@ -164,5 +164,41 @@ namespace eTickets.Controllers
             viewModel.Actors = await actorsService.GetAllAsync();
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var movie = await moviesService.GetByIdAsync(id);
+            if (movie == null)
+                return View("NotFound");
+
+            return View(movie);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var movie = await moviesService.GetByIdAsync(id);
+                var name = movie?.Name ?? "Movie";
+
+                await actorMoviesService.DeleteByMovieIdAsync(id);
+                await actorMoviesService.SaveAsync();
+
+                await moviesService.DeleteAsync(id);
+                await moviesService.SaveAsync();
+
+                TempData["SuccessMessage"] = $"{name} was deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Something went wrong while deleting the movie: {ex.Message}");
+                var movie = await moviesService.GetByIdAsync(id);
+                return View("Delete", movie);
+            }
+        }
     }
 }

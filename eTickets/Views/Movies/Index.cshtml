@@ -214,22 +214,13 @@
 
 
                                 <!-- Delete -->
-                                <form asp-controller="Movies"
-                                      asp-action="Delete"
-                                      asp-route-id="@movie.Id"
-                                      method="post"
-                                      class="m-0"
-                                      onsubmit="return confirm('Are you sure you want to delete this movie?');">
-
-                                    <button type="submit"
-                                            class="movie-action delete"
-                                            title="Delete Movie">
-
-                                        <i class="bi bi-trash-fill"></i>
-
-                                    </button>
-
-                                </form>
+                                <a asp-controller="Movies"
+                                   asp-action="Delete"
+                                   asp-route-id="@movie.Id"
+                                   class="movie-action delete"
+                                   title="Delete Movie">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
 
                             </div>
 
