@@ -18,9 +18,11 @@ namespace eTickets
 
             builder.Services.AddAutoMapper(typeof(Program));
 
-            builder.Services.AddScoped<IActorsService, ActorsService>();  // Add the ActorsService to the DI container
-            builder.Services.AddScoped<IProducersService, ProducersService>();  // Add the ProducersService to the DI container
-            builder.Services.AddScoped<ICinemasService, CinemasService>();  // Add the CinemasService to the DI container
+            // Add Services to the DI container
+            builder.Services.AddScoped<IActorsService, ActorsService>();   
+            builder.Services.AddScoped<IProducersService, ProducersService>();   
+            builder.Services.AddScoped<ICinemasService, CinemasService>();   
+            builder.Services.AddScoped<IMoviesService, MoviesService>();  
 
             var app = builder.Build();
 

@@ -21,6 +21,11 @@ namespace eTickets.Mapping
 
             CreateMap<EditCinemaViewModel, Cinema>();
             CreateMap<Cinema, EditCinemaViewModel>();
+
+            CreateMap<CreateMovieViewModel, Movie>()
+       .ForMember(dest => dest.Actor_Movies, opt => opt.Ignore())
+       .ForMember(dest => dest.Cinema, opt => opt.Ignore())
+       .ForMember(dest => dest.Producer, opt => opt.Ignore());
         }
     }
 }
