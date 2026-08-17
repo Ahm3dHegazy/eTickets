@@ -1,7 +1,6 @@
 ﻿@model Producer
-
 @{
-    ViewData["Title"] = "Delete producer";
+    ViewData["Title"] = "Delete Producer";
 }
 
 <div class="container py-4">
@@ -9,46 +8,30 @@
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-sm border-0">
                 <div class="card-header border-0 pt-4 px-4">
-                    <h3 class="mb-1">Delete Producer</h3>
+                    <h3 class="mb-1 text-danger">Delete Producer</h3>
                     <p class="text-muted mb-0">Are you sure you want to delete this producer?</p>
                 </div>
 
                 <div class="card-body px-4 pb-4">
-                    <form asp-action="Delete" asp-controller="Producers" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-                        <div class="mb-3">
-                            <input asp-for="Id" type="hidden" />
-
+                    <div class="d-flex gap-3 align-items-center mb-4">
+                        <img src="@(string.IsNullOrEmpty(Model.ProfilePictureURL) ? Url.Content("~/images/Producers/placeholder.png") : Model.ProfilePictureURL)"
+                             alt="@Model.FullName"
+                             style="width:80px;height:120px;object-fit:cover;border-radius:6px;" />
+                        <div>
+                            <h5 class="mb-1">@Model.FullName</h5>
+                            <p class="text-muted small mb-0">@Model.Bio</p>
                         </div>
-                        <div class="mb-3">
-                            <img id="ProfilePicturePreview"
-                                 class="w-50 rounded border d-none"
-                                 style="aspect-ratio: 1 / 1; object-fit: cover; object-position: top center;" />
-                        </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label asp-for="ProfilePictureURL" class="form-label fw-semibold"></label>
-                            <input asp-for="ProfilePictureURL" class="form-control" placeholder="https://example.com/photo.jpeg" />
-                            <span asp-validation-for="ProfilePictureURL" class="text-danger small"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="FullName" class="form-label fw-semibold"></label>
-                            <input asp-for="FullName" class="form-control" placeholder="e.g. John Doe" />
-                            <span asp-validation-for="FullName" class="text-danger small"></span>
-                        </div>
-
-                        <div class="mb-4">
-                            <label asp-for="Bio" class="form-label fw-semibold"></label>
-                            <input asp-for="Bio" class="form-control" placeholder="Short biography..." />
-                            <span asp-validation-for="Bio" class="text-danger small"></span>
-                        </div>
-
+                    <form asp-controller="Producers" asp-action="Delete" method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this producer? This action cannot be undone.');">
+                        <input type="hidden" asp-for="Id" />
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
                             <button type="submit" class="btn btn-danger">
-                                <i class="bi bi-trash me-1"></i> Delete
+                                <i class="bi bi-trash-fill me-1"></i> Delete
                             </button>
                         </div>
                     </form>
@@ -57,24 +40,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script>
-        function updatePreview() {
-            var preview = document.getElementById('ProfilePicturePreview');
-            var url = $("#ProfilePictureURL").val();
-            if (url) {
-                preview.src = url;
-                preview.classList.remove('d-none');
-            } else {
-                preview.classList.add('d-none');
-            }
-        }
-
-        $(document).ready(updatePreview);
-        $("#ProfilePictureURL").on("input", updatePreview);
-    </script>
-}
