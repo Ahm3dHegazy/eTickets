@@ -1,0 +1,125 @@
+﻿
+@model IEnumerable<ShoppingCartItem>
+@{
+    ViewData["Title"] = "Shopping Cart";
+    var items = Model ?? Enumerable.Empty<ShoppingCartItem>();
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div id="statusAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <script>
+                setTimeout(function () {
+                    var a = document.getElementById('statusAlert');
+                    if (!a) return;
+                    a.classList.remove('show');
+                    setTimeout(function () { a.remove(); }, 200);
+                }, 2000);
+        </script>
+    }
+
+    @if (!items.Any())
+    {
+        <div class="alert alert-info">Your cart is empty.</div>
+        <a class="btn btn-primary" asp-controller="Movies" asp-action="Index">Browse movies</a>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Poster</th>
+                        <th>Movie</th>
+                        <th class="text-end">Price</th>
+                        <th style="width:140px">Quantity</th>
+                        <th class="text-end">Line Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="cartBody">
+                    @foreach (var it in items)
+                    {
+                        <tr data-movie-id="@it.MovieId">
+                            <td style="width:80px">
+                                <img src="@(string.IsNullOrEmpty(it.MovieImageURL) ? Url.Content("~/images/movies/placeholder.png") : it.MovieImageURL)"
+                                     class="img-fluid" style="max-height:60px;object-fit:cover;" alt="@it.MovieName" />
+                            </td>
+                            <td>@it.MovieName</td>
+                            <td class="text-end price">@it.Price.ToString("C")</td>
+                            <td>
+                                <form asp-controller="ShoppingCart" asp-action="Update" method="post" class="d-flex align-items-center update-form">
+                                    <input type="hidden" name="movieId" value="@it.MovieId" />
+                                    <input type="number" name="quantity" min="1" value="@it.Quantity" class="form-control form-control-sm quantity-input" onchange="this.form.submit()" />
+                                </form>
+                            </td>
+                            <td class="text-end line-total">@((it.Price * it.Quantity).ToString("C"))</td>
+                            <td class="text-end">
+                                <form asp-controller="ShoppingCart" asp-action="Remove" method="post" class="d-inline remove-form">
+                                    <input type="hidden" name="movieId" value="@it.MovieId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Total</td>
+                        <td class="text-end fw-bold" id="grandTotal"></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="btn btn-secondary" asp-controller="Movies" asp-action="Index">Continue shopping</a>
+            <a class="btn btn-success" asp-controller="Orders" asp-action="Checkout">Checkout</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            function parseCurrency(text) {
+                return parseFloat(text.replace(/[^0-9\.\-]/g, '')) || 0;
+            }
+
+            function updateTotals() {
+                const rows = document.querySelectorAll('#cartBody tr');
+                let grand = 0;
+                rows.forEach(r => {
+                    const priceEl = r.querySelector('.price');
+                    const qtyInput = r.querySelector('.quantity-input');
+                    const lineEl = r.querySelector('.line-total');
+                    const price = parseCurrency(priceEl.textContent || '');
+                    const qty = parseInt(qtyInput.value || '0', 10);
+                    const line = price * qty;
+                    lineEl.textContent = line.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+                    grand += line;
+                });
+                const grandEl = document.getElementById('grandTotal');
+                grandEl.textContent = grand.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+            }
+
+            document.querySelectorAll('.quantity-input').forEach(function (input) {
+                input.addEventListener('input', function () {
+                    if (this.value < 1) this.value = 1;
+                    updateTotals();
+                });
+            });
+
+            updateTotals();
+        })();
+    </script>
+}

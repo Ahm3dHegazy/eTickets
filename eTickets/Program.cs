@@ -18,6 +18,15 @@ namespace eTickets
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
             builder.Services.AddAutoMapper(typeof(Program));
 
             // Add Services to the DI container
@@ -55,6 +64,8 @@ namespace eTickets
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+
+            app.UseSession();
 
             app.Run();
         }
