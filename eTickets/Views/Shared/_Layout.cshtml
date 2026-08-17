@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject eTickets.Business.Interfaces.IShoppingCartService CartService
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -49,6 +50,19 @@
                             </button>
                         </div>
                     </form>
+
+                    <a asp-controller="ShoppingCart" asp-action="Index" class="nav-link position-relative text-white me-3">
+                        <i class="bi bi-cart3 fs-5"></i>
+                        @{
+                            var cartCount = CartService.GetCount();
+                        }
+                        @if (cartCount > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @cartCount
+                            </span>
+                        }
+                    </a>
                 </div>
             </div>
         </nav>

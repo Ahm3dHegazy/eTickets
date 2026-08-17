@@ -13,8 +13,8 @@
     <!-- Movie Poster -->
     <div class="movie-photo-col">
         <img src="@(string.IsNullOrEmpty(Model.ImageURL)
-                            ? Url.Content("~/images/movies/placeholder.png")
-                            : Model.ImageURL)"
+                                    ? Url.Content("~/images/movies/placeholder.png")
+                                    : Model.ImageURL)"
              alt="@Model.Name" />
     </div>
 
@@ -237,8 +237,8 @@
                        class="cast-card text-decoration-none">
 
                         <img src="@(string.IsNullOrEmpty(am.Actor?.ProfilePictureURL)
-                                                            ? Url.Content("~/images/actors/placeholder.png")
-                                                            : am.Actor.ProfilePictureURL)"
+                                                                                    ? Url.Content("~/images/actors/placeholder.png")
+                                                                                    : am.Actor.ProfilePictureURL)"
                              alt="@am.Actor?.FullName" />
 
                         <div class="cast-info">

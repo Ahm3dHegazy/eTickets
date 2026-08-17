@@ -175,16 +175,13 @@
 
 
                              
-                            <a asp-controller="Cart"
-                               asp-action="Add"
-                               asp-route-id="@movie.Id"
-                               class="btn-add-cart">
-
-                                <i class="bi bi-cart-plus"></i>
-
-                                Add to Cart
-
-                            </a>
+                            <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post" class="d-inline">
+                                <input type="hidden" name="movieId" value="@movie.Id" />
+                                <button type="submit" class="btn-add-cart">
+                                    <i class="bi bi-cart-plus"></i>
+                                    Add to Cart
+                                </button>
+                            </form>
 
 
                              
