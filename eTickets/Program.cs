@@ -1,4 +1,5 @@
 using eTickets.Business.Interfaces;
+using eTickets.Business.Services;
 using eTickets.Data;
 using eTickets.Data.Services;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,8 @@ namespace eTickets
             builder.Services.AddScoped<IMoviesService, MoviesService>();
             builder.Services.AddScoped<ICinemasService, CinemasService>();   
             builder.Services.AddScoped<IActorMoviesService, ActorMoviesService>();
-            
+            builder.Services.AddScoped<IOrdersService, OrdersService>();
+
 
             var app = builder.Build();
 
