@@ -1,4 +1,5 @@
 ﻿using eTickets.Data.Configurations;
+using eTickets.Data.Models;
 using eTickets.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,8 @@ namespace eTickets.Data
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Producer> Producers { get; set; }
         public DbSet<Actor_Movie> Actor_Movies { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
