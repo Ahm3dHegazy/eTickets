@@ -15,6 +15,7 @@ namespace eTickets.Data.Models
         [Required]
         [EmailAddress]
         public string CustomerEmail { get; set; }
+        public string? ApplicationUserId { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalPrice { get; set; }
         public List<OrderItem> OrderItems { get; set; } 

@@ -2,10 +2,11 @@
 using eTickets.Data.Models;
 using eTickets.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace eTickets.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Actor> Actors { get; set; }
         public DbSet<Movie> Movies { get; set; }
