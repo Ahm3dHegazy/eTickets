@@ -11,6 +11,6 @@ namespace eTickets.Data.Models
         public int MovieId { get; set; }
         public Movie? Movie { get; set; }
         public int Quantity { get; set; }
-        public double UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
     }
 }

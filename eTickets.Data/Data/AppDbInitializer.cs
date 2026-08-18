@@ -60,7 +60,7 @@ namespace eTickets.Data
                 {
                     Name = "Action Blast",
                     Description = "High octane action movie.",
-                    Price = 15.00,
+                    Price = 15.00m,
                     ImageURL = "/images/movies/action-blast.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
@@ -72,7 +72,7 @@ namespace eTickets.Data
                 {
                     Name = "Funny Times",
                     Description = "A comedy for the whole family.",
-                    Price = 12.50,
+                    Price = 12.50m,
                     ImageURL = "/images/movies/funny-times.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
@@ -84,7 +84,7 @@ namespace eTickets.Data
                 {
                     Name = "Dramatic Tales",
                     Description = "A gripping drama.",
-                    Price = 14.00,
+                    Price = 14.00m,
                     ImageURL = "/images/movies/dramatic-tales.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),
@@ -96,7 +96,7 @@ namespace eTickets.Data
                 {
                     Name = "Documentary Insights",
                     Description = "An insightful documentary.",
-                    Price = 10.00,
+                    Price = 10.00m,
                     ImageURL = "/images/movies/documentary-insights.jpeg",
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddMonths(1),

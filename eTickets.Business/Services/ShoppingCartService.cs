@@ -35,7 +35,7 @@ namespace eTickets.Business.Services
             return Load().AsReadOnly();
         }
 
-        public void AddToCart(int movieId, string movieName, string movieImageUrl, double price, int quantity = 1)
+        public void AddToCart(int movieId, string movieName, string movieImageUrl, decimal price, int quantity = 1)
         {
             if (quantity <= 0) return;
 
@@ -74,7 +74,7 @@ namespace eTickets.Business.Services
             Save(items);
         }
 
-        public double GetTotal()
+        public decimal GetTotal()
         {
             return Load().Sum(i => i.Price * i.Quantity);
         }
