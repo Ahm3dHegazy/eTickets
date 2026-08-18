@@ -2,6 +2,7 @@
 using eTickets.Business.Interfaces;
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eTickets.Controllers
 {
@@ -23,12 +24,14 @@ namespace eTickets.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CreateCinemaViewModel viewModel)
         {
@@ -68,6 +71,7 @@ namespace eTickets.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id)
         {
             var cinema = await cinemasService.GetByIdAsync(id);
@@ -79,6 +83,7 @@ namespace eTickets.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditCinemaViewModel viewModel)
         {
@@ -104,6 +109,7 @@ namespace eTickets.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             var cinema = await cinemasService.GetByIdAsync(id);
@@ -114,6 +120,7 @@ namespace eTickets.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

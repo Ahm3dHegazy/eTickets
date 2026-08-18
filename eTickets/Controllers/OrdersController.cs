@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using eTickets.Business.Interfaces;
 using eTickets.Data.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace eTickets.Web.Controllers
 {
@@ -16,6 +18,7 @@ namespace eTickets.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             var orders = await ordersService.GetAllAsync();
@@ -23,16 +26,22 @@ namespace eTickets.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             var order = await ordersService.GetByIdAsync(id);
             if (order == null)
                 return View("NotFound");
 
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!User.IsInRole("Administrator") && order.ApplicationUserId != currentUserId)
+                return Forbid();
+
             return View(order);
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Checkout()
         {
             var items = cartService.GetItems();
@@ -43,6 +52,7 @@ namespace eTickets.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFromCart(string customerName, string customerEmail)
         {
@@ -61,6 +71,7 @@ namespace eTickets.Web.Controllers
             {
                 CustomerName = customerName,
                 CustomerEmail = customerEmail,
+                ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 OrderDate = DateTime.UtcNow,
                 TotalPrice = cartItems.Sum(i => i.Price * i.Quantity),
                 OrderItems = cartItems.Select(i => new OrderItem
@@ -81,6 +92,7 @@ namespace eTickets.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
