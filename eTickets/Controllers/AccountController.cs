@@ -78,6 +78,14 @@ namespace eTickets.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await userManager.GetUserAsync(User);
+            return user == null ? Challenge() : View(user);
+        }
+
         private string GetSafeReturnUrl(string? returnUrl) => Url.IsLocalUrl(returnUrl) ? returnUrl! : Url.Action("Index", "Home")!;
     }
 }

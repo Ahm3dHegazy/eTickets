@@ -1,0 +1,4 @@
+@model eTickets.Data.Models.ApplicationUser
+@{ ViewData["Title"] = "Profile"; }
+@section Styles { <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" /> }
+<div class="auth-shell"><div class="auth-card profile-card"><div class="profile-avatar">@Model.FullName?.FirstOrDefault().ToString().ToUpper()</div><p class="section-kicker">Your account</p><h1>@(Model.FullName ?? "Cinema guest")</h1><p class="text-muted">Manage your eTickets account details.</p><dl class="profile-details"><div><dt>Email address</dt><dd>@Model.Email</dd></div><div><dt>Username</dt><dd>@Model.UserName</dd></div></dl><a class="btn btn-cinema w-100" asp-controller="Movies" asp-action="Index"><i class="bi bi-film"></i> Explore movies</a></div></div>
