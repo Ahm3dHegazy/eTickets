@@ -30,6 +30,8 @@
                             <a class="nav-link" asp-controller="Movies" asp-action="Index">Movies</a>
                         </li>
 
+                        @if (User.IsInRole("Administrator"))
+                        {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Management
@@ -40,6 +42,7 @@
                                 <li><a class="dropdown-item" asp-controller="Producers" asp-action="Index">Producers</a></li>
                             </ul>
                         </li>
+                        }
                     </ul>
 
                     <form class="d-flex me-3" asp-controller="Movies" asp-action="Search" method="get">
@@ -63,6 +66,18 @@
                             </span>
                         }
                     </a>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <span class="navbar-text text-white me-2">Hello, @(User.Identity.Name)</span>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Sign out</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-light btn-sm me-2" asp-controller="Account" asp-action="Login">Sign in</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Account" asp-action="Register">Register</a>
+                    }
                 </div>
             </div>
         </nav>
