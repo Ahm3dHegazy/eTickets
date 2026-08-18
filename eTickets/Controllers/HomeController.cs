@@ -1,14 +1,23 @@
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using eTickets.Business.Interfaces;
 
 namespace eTickets.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IMoviesService moviesService;
+
+        public HomeController(IMoviesService moviesService)
         {
-            return View();
+            this.moviesService = moviesService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var movies = await moviesService.GetAllAsync();
+            return View(movies.Take(4));
         }
 
         public IActionResult Privacy()

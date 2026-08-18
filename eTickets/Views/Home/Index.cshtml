@@ -1,8 +1,71 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model IEnumerable<Movie>
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<section class="home-hero">
+    <div class="home-hero-content">
+        <span class="hero-kicker"><i class="bi bi-film"></i> Your next story starts here</span>
+        <h1>Movies worth the big screen.</h1>
+        <p>Discover new releases, pick your favorites, and reserve your cinema experience in a few simple steps.</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" asp-controller="Movies" asp-action="Index">Browse movies <i class="bi bi-arrow-right"></i></a>
+            <a class="btn btn-outline-light btn-lg" asp-controller="ShoppingCart" asp-action="Index"><i class="bi bi-cart3"></i> View cart</a>
+        </div>
+    </div>
+    <div class="hero-decoration hero-decoration-one"></div>
+    <div class="hero-decoration hero-decoration-two"></div>
+</section>
+
+<section class="py-5">
+    <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+        <div>
+            <p class="section-kicker">Now showing</p>
+            <h2 class="section-title mb-0">Find your next favorite</h2>
+        </div>
+        <a class="browse-link" asp-controller="Movies" asp-action="Index">See all movies <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var movie in Model)
+            {
+                <div class="col-sm-6 col-lg-3">
+                    <article class="home-movie-card h-100">
+                        <img src="@movie.ImageURL" alt="@movie.Name" />
+                        <div class="home-movie-card-body">
+                            <span>@movie.MovieCategory</span>
+                            <h3>@movie.Name</h3>
+                            <p>@(movie.Description.Length > 70 ? movie.Description[..70] + "…" : movie.Description)</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <strong>@movie.Price.ToString("C")</strong>
+                                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" aria-label="View @movie.Name"><i class="bi bi-arrow-up-right-circle-fill fs-4"></i></a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-light border">No movies are available yet. Check back soon.</div>
+    }
+</section>
+
+<section class="home-steps mb-5">
+    <div>
+        <p class="section-kicker">Simple from start to finish</p>
+        <h2 class="section-title">Plan your movie night.</h2>
+    </div>
+    <div class="row g-4 mt-1">
+        <div class="col-md-4"><div class="step-card"><span>01</span><i class="bi bi-search"></i><h3>Explore</h3><p>Browse titles, genres, cinemas, and movie details.</p></div></div>
+        <div class="col-md-4"><div class="step-card"><span>02</span><i class="bi bi-cart-plus"></i><h3>Add to cart</h3><p>Choose the movies you want to see and build your order.</p></div></div>
+        <div class="col-md-4"><div class="step-card"><span>03</span><i class="bi bi-ticket-perforated"></i><h3>Check out</h3><p>Sign in, confirm your details, and complete your booking.</p></div></div>
+    </div>
+</section>
