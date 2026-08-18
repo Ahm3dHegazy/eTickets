@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<Movie>
 
 @{
-    ViewData["Title"] = "Movies";
+    var selectedCategory = ViewData["SelectedCategory"] as string;
+    ViewData["Title"] = string.IsNullOrWhiteSpace(selectedCategory) ? "Movies" : $"{selectedCategory} Movies";
 }
 
 @section Styles {
@@ -13,7 +14,7 @@
      <div class="movies-header">
 
         <h2 class="movies-title">
-            Movies
+            @(string.IsNullOrWhiteSpace(selectedCategory) ? "Movies" : $"{selectedCategory} Movies")
         </h2>
 
         <a asp-controller="Movies"
@@ -31,7 +32,7 @@
     @if (Model == null || !Model.Any())
     {
         <div class="alert alert-info">
-            No movies found.
+            No movies found in this category.
         </div>
     }
     else

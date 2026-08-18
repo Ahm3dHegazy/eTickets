@@ -25,10 +25,13 @@ namespace eTickets.Controllers
             this.actorMoviesService = actorMoviesService;
             this.mapper = mapper;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(MovieCategory? category)
         {
             var movies = await moviesService.GetAllAsync();
+            if (category.HasValue)
+                movies = movies.Where(movie => movie.MovieCategory == category.Value);
 
+            ViewData["SelectedCategory"] = category?.ToString();
             return View(movies);
         }
 
