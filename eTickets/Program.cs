@@ -2,7 +2,6 @@ using eTickets.Business.Interfaces;
 using eTickets.Business.Services;
 using eTickets.Data;
 using eTickets.Data.Services;
-using eTickets.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
