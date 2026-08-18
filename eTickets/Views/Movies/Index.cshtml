@@ -187,38 +187,33 @@
 
                              
                             <div class="movie-actions">
-
-                                
                                 <a asp-controller="Movies"
                                    asp-action="Details"
                                    asp-route-id="@movie.Id"
                                    class="movie-action view"
-                                   title="View Details">
-
-                                    <i class="bi bi-eye-fill"></i>
-
+                                   title="View movie details"
+                                   aria-label="View details for @movie.Name">
+                                    <i class="bi bi-arrow-up-right"></i>
                                 </a>
 
-
+                                @if (User.IsInRole("Administrator"))
+                                {
                                 <a asp-controller="Movies"
                                    asp-action="Edit"
                                    asp-route-id="@movie.Id"
                                    class="movie-action edit"
-                                   title="Edit Movie">
-
+                                   title="Edit movie">
                                     <i class="bi bi-pencil-fill"></i>
-
                                 </a>
 
-
-                                <!-- Delete -->
                                 <a asp-controller="Movies"
                                    asp-action="Delete"
                                    asp-route-id="@movie.Id"
                                    class="movie-action delete"
-                                   title="Delete Movie">
+                                   title="Delete movie">
                                     <i class="bi bi-trash-fill"></i>
                                 </a>
+                                }
 
                             </div>
 
