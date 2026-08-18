@@ -3,6 +3,8 @@ using eTickets.Business.Interfaces;
 using eTickets.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using eTickets.Services;
+using eTickets.web.ViewModels;
 
 namespace eTickets.Web.Controllers
 {
@@ -10,11 +12,13 @@ namespace eTickets.Web.Controllers
     {
         private readonly IOrdersService ordersService;
         private readonly IShoppingCartService cartService;
+        private readonly PayPalService payPalService;
 
-        public OrdersController(IOrdersService ordersService, IShoppingCartService cartService)
+        public OrdersController(IOrdersService ordersService, IShoppingCartService cartService, PayPalService payPalService)
         {
             this.ordersService = ordersService;
             this.cartService = cartService;
+            this.payPalService = payPalService;
         }
 
         [HttpGet]
@@ -48,7 +52,41 @@ namespace eTickets.Web.Controllers
             if (!items.Any())
                 return RedirectToAction("Index", "ShoppingCart");
 
+            ViewData["PayPalClientId"] = payPalService.ClientId;
+            ViewData["PayPalConfigured"] = payPalService.IsConfigured;
             return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePayPalOrder([FromBody] PayPalCheckoutRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(new { error = "Enter a valid name and email." });
+            if (!payPalService.IsConfigured) return Problem("PayPal is not configured.", statusCode: StatusCodes.Status503ServiceUnavailable);
+            var total = cartService.GetItems().Sum(item => item.Price * item.Quantity);
+            if (total <= 0) return BadRequest(new { error = "Your cart is empty." });
+
+            try { return Ok(new { id = await payPalService.CreateOrderAsync(total) }); }
+            catch { return Problem("Unable to start the PayPal payment.", statusCode: StatusCodes.Status502BadGateway); }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CapturePayPalOrder([FromBody] CapturePayPalOrderRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(new { error = "Payment details are invalid." });
+            if (!cartService.GetItems().Any()) return BadRequest(new { error = "Your cart is empty." });
+
+            try
+            {
+                var payment = await payPalService.CaptureOrderAsync(request.PayPalOrderId);
+                if (!payment.Completed) return BadRequest(new { error = "PayPal did not complete the payment." });
+                var order = await CreateOrderFromCart(request.CustomerName, request.CustomerEmail);
+                return Ok(new { orderId = order.Id, captureId = payment.CaptureId });
+            }
+            catch { return Problem("Unable to capture the PayPal payment.", statusCode: StatusCodes.Status502BadGateway); }
         }
 
         [HttpPost]
@@ -67,28 +105,20 @@ namespace eTickets.Web.Controllers
                 return View("Checkout");
             }
 
-            var order = new Order
-            {
-                CustomerName = customerName,
-                CustomerEmail = customerEmail,
-                ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                OrderDate = DateTime.UtcNow,
-                TotalPrice = cartItems.Sum(i => i.Price * i.Quantity),
-                OrderItems = cartItems.Select(i => new OrderItem
-                {
-                    MovieId = i.MovieId,
-                    Quantity = i.Quantity,
-                    UnitPrice = i.Price
-                }).ToList()
-            };
-
-            await ordersService.AddAsync(order);
-            await ordersService.SaveAsync();
-
-            cartService.ClearCart();
+            var order = await CreateOrderFromCart(customerName, customerEmail);
 
             TempData["StatusMessage"] = "Order placed successfully.";
             return RedirectToAction(nameof(Details), new { id = order.Id });
+        }
+
+        private async Task<Order> CreateOrderFromCart(string customerName, string customerEmail)
+        {
+            var cartItems = cartService.GetItems();
+            var order = new Order { CustomerName = customerName, CustomerEmail = customerEmail, ApplicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier), OrderDate = DateTime.UtcNow, TotalPrice = cartItems.Sum(i => i.Price * i.Quantity), OrderItems = cartItems.Select(i => new OrderItem { MovieId = i.MovieId, Quantity = i.Quantity, UnitPrice = i.Price }).ToList() };
+            await ordersService.AddAsync(order);
+            await ordersService.SaveAsync();
+            cartService.ClearCart();
+            return order;
         }
 
         [HttpPost]

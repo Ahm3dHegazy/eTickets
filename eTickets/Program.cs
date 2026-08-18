@@ -3,6 +3,8 @@ using eTickets.Business.Services;
 using eTickets.Data;
 using eTickets.Data.Services;
 using Microsoft.AspNetCore.Identity;
+using eTickets.Configuration;
+using eTickets.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTickets
@@ -15,6 +17,11 @@ namespace eTickets
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
+            builder.Services.Configure<PayPalOptions>(builder.Configuration.GetSection(PayPalOptions.SectionName));
+            builder.Services.AddHttpClient<PayPalService>((_, client) =>
+                client.BaseAddress = new Uri(builder.Configuration["PayPal:UseSandbox"]?.Equals("false", StringComparison.OrdinalIgnoreCase) == true
+                    ? "https://api-m.paypal.com" : "https://api-m.sandbox.paypal.com"));
             // add DbContext service
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
