@@ -7,6 +7,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/movies-index.css" />
+    <link rel="stylesheet" href="~/css/movie-poster-ratings.css" asp-append-version="true" />
 }
 
 <div class="container py-4">
@@ -41,6 +42,9 @@
 
             @foreach (var movie in Model)
             {
+                var reviews = movie.Reviews ?? new List<eTickets.Data.Models.MovieReview>();
+                var reviewCount = reviews.Count;
+                var averageRating = reviewCount == 0 ? 0 : reviews.Average(review => review.Rating);
                 <div class="col">
 
                     <div class="movie-card">
@@ -73,6 +77,11 @@
                                     ENDED
                                 </span>
                             }
+
+                            <span class="poster-rating" aria-label="@(reviewCount == 0 ? "No ratings yet" : $"{averageRating:0.0} out of 5 stars from {reviewCount} reviews")">
+                                <i class="bi bi-star-fill"></i>
+                                @(reviewCount == 0 ? "New" : averageRating.ToString("0.0"))
+                            </span>
 
                         </div>
 

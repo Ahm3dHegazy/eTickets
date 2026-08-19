@@ -19,6 +19,7 @@ namespace eTickets.Data.Services
             var movies = await context.Movies
                 .Include(m => m.Cinema)
                 .Include(m => m.Producer)
+                .Include(m => m.Reviews)
                 .ToListAsync();
 
             return movies;

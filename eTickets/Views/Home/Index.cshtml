@@ -5,6 +5,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/movie-poster-ratings.css" asp-append-version="true" />
 }
 
 <section class="home-hero">
@@ -35,9 +36,12 @@
         <div class="row g-4">
             @foreach (var movie in Model)
             {
+                var reviews = movie.Reviews ?? new List<eTickets.Data.Models.MovieReview>();
+                var reviewCount = reviews.Count;
+                var averageRating = reviewCount == 0 ? 0 : reviews.Average(review => review.Rating);
                 <div class="col-sm-6 col-lg-3">
                     <article class="home-movie-card h-100">
-                        <img src="@movie.ImageURL" alt="@movie.Name" />
+                        <div class="home-poster-wrap"><img src="@movie.ImageURL" alt="@movie.Name" /><span class="home-poster-rating"><i class="bi bi-star-fill"></i> @(reviewCount == 0 ? "New" : averageRating.ToString("0.0"))</span></div>
                         <div class="home-movie-card-body">
                             <span>@movie.MovieCategory</span>
                             <h3>@movie.Name</h3>
