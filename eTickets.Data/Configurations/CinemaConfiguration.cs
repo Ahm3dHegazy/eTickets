@@ -12,6 +12,7 @@ namespace eTickets.Data.Configurations
             builder.Property(c => c.Name).IsRequired().HasMaxLength(200);
             builder.Property(c => c.Logo).HasMaxLength(500);
             builder.Property(c => c.Description).HasMaxLength(2000);
+            builder.Property(c => c.Location).IsRequired().HasMaxLength(300);
 
             builder.HasMany(c => c.Movies)
                    .WithOne(m => m.Cinema)

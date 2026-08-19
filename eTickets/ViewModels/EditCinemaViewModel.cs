@@ -15,5 +15,9 @@ namespace eTickets.web.ViewModels
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Location is required.")]
+        [StringLength(300, MinimumLength = 3, ErrorMessage = "Location must be between 3 and 300 characters.")]
+        public string Location { get; set; }
     }
 }

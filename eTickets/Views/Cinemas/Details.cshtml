@@ -46,6 +46,14 @@
             @(string.IsNullOrEmpty(Model.Description) ? "No biography available." : Model.Description)
         </p>
 
+        <div class="section-heading">
+            <span class="icon-circle"><i class="bi bi-geo-alt-fill"></i></span>
+            LOCATION
+        </div>
+        <p class="bio-text">
+            @(string.IsNullOrWhiteSpace(Model.Location) ? "Location is not available yet." : Model.Location)
+        </p>
+
         @if (Model.Movies != null && Model.Movies.Any())
         {
             <div class="section-heading">

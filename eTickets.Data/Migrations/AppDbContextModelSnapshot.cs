@@ -399,12 +399,17 @@ namespace eTickets.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                      b.Property<string>("Logo")
+                          .IsRequired()
+                          .HasMaxLength(500)
+                          .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Name")
+                      b.Property<string>("Location")
+                          .IsRequired()
+                          .HasMaxLength(300)
+                          .HasColumnType("nvarchar(300)");
+
+                      b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
