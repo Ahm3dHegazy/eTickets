@@ -1,9 +1,8 @@
-﻿ using eTickets.Models;
+﻿using eTickets.Models;
 using eTickets.Data.Enums;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace eTickets.Data
+namespace eTickets.Data.Data
 {
     public static class SeedData
     {
@@ -15,10 +14,12 @@ namespace eTickets.Data
             // Apply migrations (if using migrations)
             // context.Database.Migrate();
 
-            // Existing installations receive the additional catalog without duplicating records.
+            // Only seed a completely empty database. Once any cinema exists,
+            // assume the app (and its admin) owns the data from here on and
+            // never touch it again on startup. This avoids re-adding records
+            // that an admin has deliberately deleted.
             if (context.Cinemas.Any())
             {
-                SeedAdditionalCatalog(context);
                 return;
             }
 
@@ -124,6 +125,9 @@ namespace eTickets.Data
             context.AddRange(actorMovies);
             context.SaveChanges();
 
+            // This only runs the very first time the database is empty,
+            // so it's safe: it can never "resurrect" a deleted record,
+            // because Initialize already returned above on any later run.
             SeedAdditionalCatalog(context);
         }
 
@@ -142,7 +146,7 @@ namespace eTickets.Data
                 new() { Name = "Galaxy Grand", Logo = "/images/cinemas/movie-palace.jpeg", Description = "Blockbuster experiences for every audience." },
                 new() { Name = "Sunset Cinema", Logo = "/images/cinemas/cinema-world.jpeg", Description = "An easygoing neighborhood theater." }
             };
-            AddMissing(context.Cinemas, cinemas, cinema => cinema.Name);
+            context.Cinemas.AddRange(cinemas);
 
             var producers = new List<Producer>
             {
@@ -157,7 +161,7 @@ namespace eTickets.Data
                 new() { FullName = "Grace Chen", ProfilePictureURL = "/images/producers/producer-delta.jpeg", Bio = "Producer of insightful documentaries." },
                 new() { FullName = "Noah Williams", ProfilePictureURL = "/images/producers/producer-epsilon.jpeg", Bio = "Producer of crowd-pleasing comedies." }
             };
-            AddMissing(context.Producers, producers, producer => producer.FullName);
+            context.Producers.AddRange(producers);
 
             var actors = new List<Actor>
             {
@@ -172,7 +176,7 @@ namespace eTickets.Data
                 new() { FullName = "Isla Morgan", ProfilePictureURL = "/images/actors/emily-white.jpeg", Bio = "Actor celebrated for heartfelt roles." },
                 new() { FullName = "Owen Price", ProfilePictureURL = "/images/actors/michael-brown.jpeg", Bio = "Experienced actor across film and theater." }
             };
-            AddMissing(context.Actors, actors, actor => actor.FullName);
+            context.Actors.AddRange(actors);
             context.SaveChanges();
 
             var cinemaByName = context.Cinemas.ToDictionary(cinema => cinema.Name);
@@ -191,7 +195,7 @@ namespace eTickets.Data
                 new() { Name = "Weekend Detectives", Description = "Three friends turn a small mystery into a big adventure.", Price = 12m, ImageURL = "/images/movies/funny-times.jpeg", StartDate = startDate, EndDate = startDate.AddMonths(1), MovieCategory = MovieCategory.Comedy, CinemaId = cinemaByName["Galaxy Grand"].Id, ProducerId = producerByName["Maya Ibrahim"].Id },
                 new() { Name = "Ember Protocol", Description = "An analyst uncovers a dangerous conspiracy.", Price = 16m, ImageURL = "/images/movies/action-blast.jpeg", StartDate = startDate, EndDate = startDate.AddMonths(1), MovieCategory = MovieCategory.Action, CinemaId = cinemaByName["Sunset Cinema"].Id, ProducerId = producerByName["Sofia Laurent"].Id }
             };
-            AddMissing(context.Movies, movies, movie => movie.Name);
+            context.Movies.AddRange(movies);
             context.SaveChanges();
 
             var actorByName = context.Actors.ToDictionary(actor => actor.FullName);
@@ -205,17 +209,9 @@ namespace eTickets.Data
             {
                 var actorId = actorByName[actorName].Id;
                 var movieId = movieByName[movieName].Id;
-                if (!context.Actor_Movies.Any(item => item.ActorId == actorId && item.MovieId == movieId))
-                    context.Actor_Movies.Add(new Actor_Movie { ActorId = actorId, MovieId = movieId });
+                context.Actor_Movies.Add(new Actor_Movie { ActorId = actorId, MovieId = movieId });
             }
             context.SaveChanges();
-        }
-
-        private static void AddMissing<TEntity>(DbSet<TEntity> set, IEnumerable<TEntity> items, Func<TEntity, string> keySelector)
-            where TEntity : class
-        {
-            var existingKeys = set.AsNoTracking().AsEnumerable().Select(keySelector).ToHashSet(StringComparer.OrdinalIgnoreCase);
-            set.AddRange(items.Where(item => !existingKeys.Contains(keySelector(item))));
         }
     }
 }
