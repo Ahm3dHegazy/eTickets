@@ -419,7 +419,7 @@ namespace eTickets.Migrations
                     b.ToTable("Cinemas");
                 });
 
-            modelBuilder.Entity("eTickets.Models.Movie", b =>
+              modelBuilder.Entity("eTickets.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -467,7 +467,40 @@ namespace eTickets.Migrations
 
                     b.HasIndex("ProducerId");
 
-                    b.ToTable("Movies");
+                  b.ToTable("Movies");
+              });
+
+            modelBuilder.Entity("eTickets.Data.Models.MovieReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Rating")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("MovieId", "ApplicationUserId").IsUnique();
+                    b.ToTable("MovieReviews");
                 });
 
             modelBuilder.Entity("eTickets.Models.Producer", b =>
@@ -606,7 +639,7 @@ namespace eTickets.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("eTickets.Models.Movie", b =>
+              modelBuilder.Entity("eTickets.Models.Movie", b =>
                 {
                     b.HasOne("eTickets.Models.Cinema", "Cinema")
                         .WithMany("Movies")
@@ -621,7 +654,27 @@ namespace eTickets.Migrations
 
                     b.Navigation("Cinema");
 
-                    b.Navigation("Producer");
+                  b.Navigation("Producer");
+
+                  b.Navigation("Reviews");
+              });
+
+            modelBuilder.Entity("eTickets.Data.Models.MovieReview", b =>
+                {
+                    b.HasOne("eTickets.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("eTickets.Models.Movie", "Movie")
+                        .WithMany("Reviews")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("eTickets.Data.Models.Cart", b =>

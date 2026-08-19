@@ -1,6 +1,7 @@
 ﻿using eTickets.Data.Base;
 using eTickets.Data.Enums;
 using System.ComponentModel.DataAnnotations;
+using eTickets.Data.Models;
 
 namespace eTickets.Models
 {
@@ -26,5 +27,7 @@ namespace eTickets.Models
         // Producer
         public int ProducerId { get; set; }
         public Producer Producer { get; set; } 
+
+        public List<MovieReview> Reviews { get; set; } = [];
     }
 }

@@ -17,6 +17,7 @@ namespace eTickets.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<MovieReview> MovieReviews { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
