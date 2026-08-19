@@ -1,38 +1,95 @@
-@model Movie
+@model MovieDetailsViewModel
 @{
-    ViewData["Title"] = Model.Name;
-    var status = DateTime.Now < Model.StartDate ? "Coming soon" : DateTime.Now <= Model.EndDate ? "Now showing" : "Ended";
+    var movie = Model.Movie;
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    ViewData["Title"] = movie.Name;
+    var status = DateTime.Now < movie.StartDate ? "Coming soon" : DateTime.Now <= movie.EndDate ? "Now showing" : "Ended";
 }
 
-@section Styles { <link rel="stylesheet" href="~/css/movie-details.css" asp-append-version="true" /> }
+@section Styles { <link rel="stylesheet" href="~/css/movie-details.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/movie-reviews.css" asp-append-version="true" /> }
 
-<section class="movie-detail-hero" style="--poster: url('@Model.ImageURL');">
+<section class="movie-detail-hero" style="--poster: url('@movie.ImageURL');">
     <div class="movie-detail-backdrop"></div>
     <div class="movie-detail-content">
-        <nav class="movie-breadcrumb" aria-label="Breadcrumb"><a asp-controller="Home" asp-action="Index"><i class="bi bi-house-fill"></i></a><span>/</span><a asp-controller="Movies" asp-action="Index">Movies</a><span>/</span><strong>@Model.Name</strong></nav>
+        <nav class="movie-breadcrumb" aria-label="Breadcrumb"><a asp-controller="Home" asp-action="Index"><i class="bi bi-house-fill"></i></a><span>/</span><a asp-controller="Movies" asp-action="Index">Movies</a><span>/</span><strong>@movie.Name</strong></nav>
         <div class="movie-detail-grid">
-            <aside class="movie-poster-wrap"><img src="@(string.IsNullOrEmpty(Model.ImageURL) ? Url.Content("~/images/movies/placeholder.png") : Model.ImageURL)" alt="@Model.Name" /><span class="movie-live-badge">@status</span></aside>
+            <aside class="movie-poster-wrap"><img src="@(string.IsNullOrEmpty(movie.ImageURL) ? Url.Content("~/images/movies/placeholder.png") : movie.ImageURL)" alt="@movie.Name" /><span class="movie-live-badge">@status</span></aside>
             <div class="movie-detail-main">
-                <div class="movie-detail-topline"><span class="movie-genre">@Model.MovieCategory</span><span><i class="bi bi-star-fill"></i> Featured selection</span></div>
-                <h1>@Model.Name</h1>
-                <p class="movie-lead">@(string.IsNullOrWhiteSpace(Model.Description) ? "No description available." : Model.Description)</p>
+                <div class="movie-detail-topline"><span class="movie-genre">@movie.MovieCategory</span><span class="movie-rating-pill"><i class="bi bi-star-fill"></i> @(Model.ReviewCount == 0 ? "New" : Model.AverageRating.ToString("0.0")) <small>(@Model.ReviewCount review@(Model.ReviewCount == 1 ? "" : "s"))</small></span></div>
+                <h1>@movie.Name</h1>
+                <p class="movie-lead">@(string.IsNullOrWhiteSpace(movie.Description) ? "No description available." : movie.Description)</p>
                 <div class="movie-cta-row">
-                    <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post"><input type="hidden" name="movieId" value="@Model.Id" /><button class="btn btn-cinema btn-lg" type="submit"><i class="bi bi-bag-plus"></i> Add to cart · @Model.Price.ToString("C")</button></form>
+                    <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post"><input type="hidden" name="movieId" value="@movie.Id" /><button class="btn btn-cinema btn-lg" type="submit"><i class="bi bi-bag-plus"></i> Add to cart · @movie.Price.ToString("C")</button></form>
                     <a asp-controller="Movies" asp-action="Index" class="btn movie-back-btn"><i class="bi bi-arrow-left"></i> Browse movies</a>
-                    @if (User.IsInRole("Administrator")) { <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn movie-edit-btn" aria-label="Edit @Model.Name"><i class="bi bi-pencil-fill"></i></a> }
+                    @if (User.IsInRole("Administrator")) { <a asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id" class="btn movie-edit-btn" aria-label="Edit @movie.Name"><i class="bi bi-pencil-fill"></i></a> }
                 </div>
                 <div class="movie-facts">
-                    <div><i class="bi bi-calendar-event"></i><span>Showing from</span><strong>@Model.StartDate.ToString("MMM dd, yyyy")</strong></div>
-                    <div><i class="bi bi-calendar-check"></i><span>Final showing</span><strong>@Model.EndDate.ToString("MMM dd, yyyy")</strong></div>
-                    <div><i class="bi bi-building"></i><span>Cinema</span>@if (Model.Cinema != null) { <a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CinemaId">@Model.Cinema.Name</a> } else { <strong>N/A</strong> }</div>
-                    <div><i class="bi bi-camera-reels"></i><span>Producer</span>@if (Model.Producer != null) { <a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">@Model.Producer.FullName</a> } else { <strong>N/A</strong> }</div>
+                    <div><i class="bi bi-calendar-event"></i><span>Showing from</span><strong>@movie.StartDate.ToString("MMM dd, yyyy")</strong></div>
+                    <div><i class="bi bi-calendar-check"></i><span>Final showing</span><strong>@movie.EndDate.ToString("MMM dd, yyyy")</strong></div>
+                    <div><i class="bi bi-building"></i><span>Cinema</span>@if (movie.Cinema != null) { <a asp-controller="Cinemas" asp-action="Details" asp-route-id="@movie.CinemaId">@movie.Cinema.Name</a> } else { <strong>N/A</strong> }</div>
+                    <div><i class="bi bi-camera-reels"></i><span>Producer</span>@if (movie.Producer != null) { <a asp-controller="Producers" asp-action="Details" asp-route-id="@movie.ProducerId">@movie.Producer.FullName</a> } else { <strong>N/A</strong> }</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-@if (Model.Actor_Movies != null && Model.Actor_Movies.Any())
+@if (movie.Actor_Movies != null && movie.Actor_Movies.Any())
 {
-    <section class="movie-cast-section"><div class="movie-section-heading"><p>Meet the cast</p><h2>On screen</h2></div><div class="movie-cast-grid">@foreach (var am in Model.Actor_Movies) { <a asp-controller="Actors" asp-action="Details" asp-route-id="@am.ActorId" class="movie-cast-card"><img src="@(string.IsNullOrEmpty(am.Actor?.ProfilePictureURL) ? Url.Content("~/images/actors/placeholder.png") : am.Actor.ProfilePictureURL)" alt="@am.Actor?.FullName" /><span><strong>@am.Actor?.FullName</strong><small>View profile <i class="bi bi-arrow-up-right"></i></small></span></a> }</div></section>
+    <section class="movie-cast-section"><div class="movie-section-heading"><p>Meet the cast</p><h2>On screen</h2></div><div class="movie-cast-grid">@foreach (var am in movie.Actor_Movies) { <a asp-controller="Actors" asp-action="Details" asp-route-id="@am.ActorId" class="movie-cast-card"><img src="@(string.IsNullOrEmpty(am.Actor?.ProfilePictureURL) ? Url.Content("~/images/actors/placeholder.png") : am.Actor.ProfilePictureURL)" alt="@am.Actor?.FullName" /><span><strong>@am.Actor?.FullName</strong><small>View profile <i class="bi bi-arrow-up-right"></i></small></span></a> }</div></section>
 }
+
+<section class="movie-reviews-section" id="reviews">
+    <div class="movie-section-heading"><p>Audience feedback</p><h2>Reviews</h2></div>
+    <div class="reviews-layout">
+        <aside class="review-summary-card">
+            <strong>@(Model.ReviewCount == 0 ? "—" : Model.AverageRating.ToString("0.0"))</strong>
+            <div class="review-stars" aria-label="@Model.AverageRating.ToString("0.0") out of 5 stars">@for (var star = 1; star <= 5; star++) { <i class="bi @(star <= Math.Round(Model.AverageRating, MidpointRounding.AwayFromZero) ? "bi-star-fill" : "bi-star")"></i> }</div>
+            <span>Based on @Model.ReviewCount review@(Model.ReviewCount == 1 ? "" : "s")</span>
+        </aside>
+        <div class="review-composer-card">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <h3>Share your experience</h3><p>Your review helps other moviegoers choose what to watch.</p>
+                @if (TempData["ReviewError"] is string reviewError) { <div class="alert alert-danger py-2">@reviewError</div> }
+                @if (TempData["ReviewSuccess"] is string reviewSuccess) { <div class="alert alert-success py-2">@reviewSuccess</div> }
+                <form asp-controller="MovieReviews" asp-action="Save" method="post">
+                    <input asp-for="ReviewForm.MovieId" type="hidden" />
+                    <div class="star-picker" role="radiogroup" aria-label="Your rating">
+                        @for (var rating = 5; rating >= 1; rating--) { <input asp-for="ReviewForm.Rating" id="rating-@rating" type="radio" value="@rating" /><label for="rating-@rating" title="@rating stars"><i class="bi bi-star-fill"></i></label> }
+                    </div>
+                    <span asp-validation-for="ReviewForm.Rating" class="text-danger small"></span>
+                    <textarea asp-for="ReviewForm.Comment" class="form-control review-textarea" rows="3" placeholder="What did you think of this movie? (optional)"></textarea>
+                    <span asp-validation-for="ReviewForm.Comment" class="text-danger small"></span>
+                    <button class="btn btn-cinema mt-3" type="submit"><i class="bi bi-send-fill"></i> Publish review</button>
+                </form>
+            }
+            else
+            {
+                <h3>Seen this movie?</h3><p>Sign in to rate it and share your experience with the community.</p>
+                <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Details", "Movies", new { id = movie.Id })" class="btn btn-cinema">Sign in to review</a>
+            }
+        </div>
+    </div>
+
+    @if (Model.Reviews.Count == 0)
+    {
+        <div class="reviews-empty"><i class="bi bi-chat-square-heart"></i><p>No reviews yet. Be the first to share your thoughts.</p></div>
+    }
+    else
+    {
+        <div class="reviews-list">
+            @foreach (var review in Model.Reviews)
+            {
+                <article class="review-card">
+                    <div class="review-avatar">@((review.ApplicationUser.FullName ?? review.ApplicationUser.Email ?? "U")[0].ToString().ToUpperInvariant())</div>
+                    <div class="review-content"><div class="review-header"><div><strong>@(review.ApplicationUser.FullName ?? review.ApplicationUser.Email)</strong><div class="review-stars">@for (var star = 1; star <= 5; star++) { <i class="bi @(star <= review.Rating ? "bi-star-fill" : "bi-star")"></i> }</div></div><time datetime="@review.CreatedAt.ToString("O")">@(review.UpdatedAt.HasValue ? "Updated " : "")@((review.UpdatedAt ?? review.CreatedAt).ToLocalTime().ToString("MMM dd, yyyy"))</time></div>
+                    @if (!string.IsNullOrWhiteSpace(review.Comment)) { <p>@review.Comment</p> }
+                    @if (User.IsInRole("Administrator") || review.ApplicationUserId == currentUserId) { <form asp-controller="MovieReviews" asp-action="Delete" method="post"><input type="hidden" name="id" value="@review.Id" /><button type="submit" class="review-delete-btn" aria-label="Delete review"><i class="bi bi-trash3"></i> Remove</button></form> }</div>
+                </article>
+            }
+        </div>
+    }
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

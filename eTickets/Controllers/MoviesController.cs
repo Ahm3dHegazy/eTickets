@@ -14,15 +14,17 @@ namespace eTickets.Controllers
         private readonly IProducersService producersService;
         private readonly IActorsService actorsService;
         private readonly IActorMoviesService actorMoviesService;
+        private readonly IMovieReviewsService movieReviewsService;
 
         public MoviesController(IMoviesService moviesService,ICinemasService cinemasService,
-            IProducersService producersService,IActorsService actorsService,IActorMoviesService actorMoviesService,IMapper mapper)
+            IProducersService producersService,IActorsService actorsService,IActorMoviesService actorMoviesService, IMovieReviewsService movieReviewsService, IMapper mapper)
         {
             this.moviesService = moviesService;
             this.cinemasService = cinemasService;
             this.producersService = producersService;
             this.actorsService = actorsService;
             this.actorMoviesService = actorMoviesService;
+            this.movieReviewsService = movieReviewsService;
             this.mapper = mapper;
         }
         public async Task<IActionResult> Index(MovieCategory? category)
@@ -98,7 +100,13 @@ namespace eTickets.Controllers
             {
                 return View("NotFound");
             }
-            return View(movie);
+            var reviews = await movieReviewsService.GetByMovieIdAsync(id);
+            return View(new MovieDetailsViewModel
+            {
+                Movie = movie,
+                Reviews = reviews,
+                ReviewForm = new CreateMovieReviewViewModel { MovieId = movie.Id }
+            });
         }
 
         [HttpGet]
