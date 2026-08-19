@@ -34,8 +34,9 @@ public class PayPalService
         });
 
         using var response = await httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var responseContent = await response.Content.ReadAsStringAsync();
+        EnsureSuccess(response, responseContent);
+        using var document = JsonDocument.Parse(responseContent);
         return document.RootElement.GetProperty("id").GetString()!;
     }
 
@@ -45,15 +46,25 @@ public class PayPalService
         using var request = new HttpRequestMessage(HttpMethod.Post, $"/v2/checkout/orders/{Uri.EscapeDataString(payPalOrderId)}/capture");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         request.Headers.Add("PayPal-Request-Id", Guid.NewGuid().ToString());
+        request.Headers.Add("Prefer", "return=representation");
         request.Content = JsonContent.Create(new { });
 
         using var response = await httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var responseContent = await response.Content.ReadAsStringAsync();
+        EnsureSuccess(response, responseContent);
+        using var document = JsonDocument.Parse(responseContent);
         var completed = document.RootElement.GetProperty("status").GetString() == "COMPLETED";
         string? captureId = null;
-        if (completed && document.RootElement.TryGetProperty("purchase_units", out var units))
-            captureId = units[0].GetProperty("payments").GetProperty("captures")[0].GetProperty("id").GetString();
+        if (completed &&
+            document.RootElement.TryGetProperty("purchase_units", out var units) &&
+            units.GetArrayLength() > 0 &&
+            units[0].TryGetProperty("payments", out var payments) &&
+            payments.TryGetProperty("captures", out var captures) &&
+            captures.GetArrayLength() > 0 &&
+            captures[0].TryGetProperty("id", out var captureIdElement))
+        {
+            captureId = captureIdElement.GetString();
+        }
         return (completed, captureId);
     }
 
@@ -64,8 +75,15 @@ public class PayPalService
         request.Headers.Authorization = new AuthenticationHeaderValue("Basic", credentials);
         request.Content = new FormUrlEncodedContent(new Dictionary<string, string> { ["grant_type"] = "client_credentials" });
         using var response = await httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var responseContent = await response.Content.ReadAsStringAsync();
+        EnsureSuccess(response, responseContent);
+        using var document = JsonDocument.Parse(responseContent);
         return document.RootElement.GetProperty("access_token").GetString()!;
+    }
+
+    private static void EnsureSuccess(HttpResponseMessage response, string responseContent)
+    {
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException($"PayPal API returned {(int)response.StatusCode}: {responseContent}");
     }
 }
