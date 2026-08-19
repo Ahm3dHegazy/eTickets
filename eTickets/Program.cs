@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using eTickets.Configuration;
 using eTickets.Services;
 using Microsoft.EntityFrameworkCore;
+using eTickets.Data.Data;
 
 namespace eTickets
 {
@@ -88,6 +89,7 @@ namespace eTickets
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -97,8 +99,6 @@ namespace eTickets
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-
-            app.UseSession();
 
             app.Run();
         }

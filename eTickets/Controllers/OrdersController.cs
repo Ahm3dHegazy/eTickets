@@ -13,12 +13,14 @@ namespace eTickets.Web.Controllers
         private readonly IOrdersService ordersService;
         private readonly IShoppingCartService cartService;
         private readonly PayPalService payPalService;
+        private readonly ILogger<OrdersController> logger;
 
-        public OrdersController(IOrdersService ordersService, IShoppingCartService cartService, PayPalService payPalService)
+        public OrdersController(IOrdersService ordersService, IShoppingCartService cartService, PayPalService payPalService, ILogger<OrdersController> logger)
         {
             this.ordersService = ordersService;
             this.cartService = cartService;
             this.payPalService = payPalService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -68,7 +70,11 @@ namespace eTickets.Web.Controllers
             if (total <= 0) return BadRequest(new { error = "Your cart is empty." });
 
             try { return Ok(new { id = await payPalService.CreateOrderAsync(total) }); }
-            catch { return Problem("Unable to start the PayPal payment.", statusCode: StatusCodes.Status502BadGateway); }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "PayPal create-order request failed.");
+                return Problem("Unable to start the PayPal payment.", statusCode: StatusCodes.Status502BadGateway);
+            }
         }
 
         [HttpPost]
@@ -86,7 +92,11 @@ namespace eTickets.Web.Controllers
                 var order = await CreateOrderFromCart(request.CustomerName, request.CustomerEmail);
                 return Ok(new { orderId = order.Id, captureId = payment.CaptureId });
             }
-            catch { return Problem("Unable to capture the PayPal payment.", statusCode: StatusCodes.Status502BadGateway); }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "PayPal capture request failed for {PayPalOrderId}.", request.PayPalOrderId);
+                return Problem("Unable to capture the PayPal payment.", statusCode: StatusCodes.Status502BadGateway);
+            }
         }
 
         [HttpPost]
