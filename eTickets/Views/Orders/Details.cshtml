@@ -1,0 +1,30 @@
+@model eTickets.Data.Models.Order
+@{
+    ViewData["Title"] = "Booking confirmed";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/order-details.css" asp-append-version="true" /> }
+
+<section class="order-confirmation">
+    <div class="order-success-icon"><i class="bi bi-check2"></i></div>
+    <p class="section-kicker">Booking confirmed</p>
+    <h1>Enjoy the show, @Model.CustomerName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()!</h1>
+    <p class="order-lead">Your payment was completed and your tickets are reserved. A confirmation has been prepared for <strong>@Model.CustomerEmail</strong>.</p>
+
+    <div class="order-reference"><span>Booking reference</span><strong>#ET-@Model.Id.ToString("D6")</strong><span>@Model.OrderDate.ToLocalTime().ToString("MMM dd, yyyy · h:mm tt")</span></div>
+
+    <div class="order-details-card">
+        <div class="order-card-heading"><h2>Your tickets</h2><strong>@Model.TotalPrice.ToString("C")</strong></div>
+        @foreach (var item in Model.OrderItems)
+        {
+            <div class="order-ticket-row">
+                <img src="@(string.IsNullOrWhiteSpace(item.Movie?.ImageURL) ? Url.Content("~/images/movies/placeholder.png") : item.Movie.ImageURL)" alt="@item.Movie?.Name" />
+                <div><strong>@(item.Movie?.Name ?? "Movie ticket")</strong><span>@item.Quantity ticket@(item.Quantity == 1 ? "" : "s") · @item.UnitPrice.ToString("C") each</span></div>
+                <b>@(item.UnitPrice * item.Quantity).ToString("C")</b>
+            </div>
+        }
+        <div class="order-total-row"><span>Total paid</span><strong>@Model.TotalPrice.ToString("C")</strong></div>
+    </div>
+
+    <div class="order-actions"><a asp-controller="Movies" asp-action="Index" class="btn btn-cinema"><i class="bi bi-film"></i> Browse more movies</a><a asp-controller="Home" asp-action="Index" class="btn order-secondary-btn">Back to home</a></div>
+</section>
