@@ -1,7 +1,5 @@
 using eTickets.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using eTickets.Business.Interfaces;
 
 namespace eTickets.Controllers
 {

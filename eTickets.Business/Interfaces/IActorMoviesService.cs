@@ -1,5 +1,4 @@
-﻿using eTickets.Data.Base;
-using eTickets.Models;
+﻿using eTickets.Models;
 
 namespace eTickets.Business.Interfaces
 {

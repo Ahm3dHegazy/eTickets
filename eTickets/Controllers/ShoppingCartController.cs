@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using eTickets.Business.Interfaces;
-
-namespace eTickets.Web.Controllers
+﻿namespace eTickets.Web.Controllers
 {
     public class ShoppingCartController : Controller
     {

@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using eTickets.Business.Interfaces;
-using eTickets.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using eTickets.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace eTickets.Controllers

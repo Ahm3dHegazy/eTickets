@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using eTickets.Models;
-using eTickets.web.ViewModels;
+﻿using eTickets.Models;
 
 namespace eTickets.Mapping
 {

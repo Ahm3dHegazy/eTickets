@@ -1,12 +1,3 @@
-using eTickets.Business.Interfaces;
-using eTickets.Business.Services;
-using eTickets.Data;
-using eTickets.Data.Services;
-using Microsoft.AspNetCore.Identity;
-using eTickets.Configuration;
-using eTickets.Services;
-using Microsoft.EntityFrameworkCore;
-using eTickets.Data.Data;
 
 namespace eTickets
 {

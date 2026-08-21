@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using eTickets.Business.Interfaces;
-using eTickets.Data.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using eTickets.Services;
-using eTickets.web.ViewModels;
 
 namespace eTickets.Web.Controllers
 {
