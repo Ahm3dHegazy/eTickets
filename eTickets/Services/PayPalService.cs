@@ -30,6 +30,11 @@ public class PayPalService
         request.Content = JsonContent.Create(new
         {
             intent = "CAPTURE",
+            application_context = new
+            {
+                shipping_preference = "NO_SHIPPING",
+                user_action = "PAY_NOW"
+            },
             purchase_units = new[] { new { amount = new { currency_code = options.Currency, value = total.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) } } }
         });
 

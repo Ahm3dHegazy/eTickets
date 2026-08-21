@@ -14,13 +14,15 @@ namespace eTickets.Web.Controllers
         private readonly IShoppingCartService cartService;
         private readonly PayPalService payPalService;
         private readonly ILogger<OrdersController> logger;
+        private readonly IWebHostEnvironment environment;
 
-        public OrdersController(IOrdersService ordersService, IShoppingCartService cartService, PayPalService payPalService, ILogger<OrdersController> logger)
+        public OrdersController(IOrdersService ordersService, IShoppingCartService cartService, PayPalService payPalService, ILogger<OrdersController> logger, IWebHostEnvironment environment)
         {
             this.ordersService = ordersService;
             this.cartService = cartService;
             this.payPalService = payPalService;
             this.logger = logger;
+            this.environment = environment;
         }
 
         [HttpGet]
@@ -95,7 +97,10 @@ namespace eTickets.Web.Controllers
             catch (Exception exception)
             {
                 logger.LogError(exception, "PayPal capture request failed for {PayPalOrderId}.", request.PayPalOrderId);
-                return Problem("Unable to capture the PayPal payment.", statusCode: StatusCodes.Status502BadGateway);
+                var detail = environment.IsDevelopment()
+                    ? $"Unable to capture the PayPal payment. {exception.Message}"
+                    : "Unable to capture the PayPal payment.";
+                return Problem(detail, statusCode: StatusCodes.Status502BadGateway);
             }
         }
 
