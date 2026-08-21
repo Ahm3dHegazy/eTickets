@@ -186,44 +186,38 @@
 
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <a class="nav-login"
-                               asp-controller="Account"
-                               asp-action="Profile">
-                                <i class="bi bi-person-circle"></i>
-                                Profile
-                            </a>
-
-                            <a class="nav-login"
-                               asp-controller="Orders"
-                               asp-action="MyOrders">
-                                <i class="bi bi-ticket-perforated"></i>
-                                My orders
-                            </a>
-
-                            <form asp-controller="Account"
-                                  asp-action="Logout"
-                                  method="post">
-
-                                <button type="submit"
-                                        class="btn btn-link nav-signout">
-                                    Sign out
+                            <div class="dropdown nav-account">
+                                <button class="account-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span class="account-name">@User.Identity.Name?.Split('@')[0]</span>
+                                    <span class="menu-icon"><i class="bi bi-list"></i></span>
                                 </button>
-
-                            </form>
+                                <ul class="dropdown-menu dropdown-menu-end account-dropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                            @* <i class="bi bi-person"></i>*@ My Profile 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Orders" asp-action="MyOrders">
+                                            @* <i class="bi bi-ticket-perforated"></i> *@ My Orders
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right"></i> Log out
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
-                            <a class="nav-login"
-                               asp-controller="Account"
-                               asp-action="Login">
-                                Sign in
-                            </a>
-
-                            <a class="btn btn-cinema btn-sm"
-                               asp-controller="Account"
-                               asp-action="Register">
-                                Join now
-                            </a>
+                            <a class="nav-login" asp-controller="Account" asp-action="Login">Sign in</a>
+                            <a class="btn btn-cinema btn-sm" asp-controller="Account" asp-action="Register">Join now</a>
                         }
 
                     </div>

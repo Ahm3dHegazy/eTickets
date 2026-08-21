@@ -75,3 +75,42 @@ a {
   background-color: rgba(255,255,255,0.06);
   color: #ffffff;
 }
+.account-toggle {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    color: #eee;
+    font-weight: 600;
+    font-size: .9rem;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+    .account-toggle:hover,
+    .account-toggle:focus,
+    .account-toggle:active {
+        background: none !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        color: #fff;
+    }
+
+    .account-toggle .bi-person-circle {
+        font-size: 1.2rem;
+        color: #c5c1be
+    }
+
+    .account-toggle .account-name {
+        white-space: nowrap
+    }
+
+    .account-toggle .menu-icon {
+        display: flex;
+        align-items: center;
+        color: #c5c1be;
+        font-size: 1.2rem;
+    }
