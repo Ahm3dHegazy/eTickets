@@ -50,6 +50,15 @@ namespace eTickets.Web.Controllers
 
         [HttpGet]
         [Authorize]
+        public async Task<IActionResult> MyOrders()
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orders = await ordersService.GetAllAsync();
+            return View(orders.Where(order => order.ApplicationUserId == currentUserId));
+        }
+
+        [HttpGet]
+        [Authorize]
         public IActionResult Checkout()
         {
             var items = cartService.GetItems();

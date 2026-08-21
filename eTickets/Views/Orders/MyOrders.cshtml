@@ -1,0 +1,30 @@
+@model IEnumerable<eTickets.Data.Models.Order>
+@{
+    ViewData["Title"] = "My orders";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/order-history.css" asp-append-version="true" /> }
+
+<section class="order-history">
+    <div class="order-history-heading"><div><p class="section-kicker">Your bookings</p><h1>My orders</h1><p>All of your confirmed eTickets bookings in one place.</p></div><a class="btn btn-cinema" asp-controller="Movies" asp-action="Index"><i class="bi bi-plus-lg"></i> Book another movie</a></div>
+
+    @if (!Model.Any())
+    {
+        <div class="order-history-empty"><i class="bi bi-ticket-perforated"></i><h2>No bookings yet</h2><p>When you complete a checkout, your tickets will appear here.</p><a class="btn btn-cinema" asp-controller="Movies" asp-action="Index">Browse movies</a></div>
+    }
+    else
+    {
+        <div class="order-history-list">
+            @foreach (var order in Model)
+            {
+                <article class="order-history-card">
+                    <div class="order-history-reference"><span>Booking</span><strong>#ET-@order.Id.ToString("D6")</strong></div>
+                    <div class="order-history-movies"><strong>@string.Join(", ", order.OrderItems.Select(item => item.Movie?.Name ?? "Movie ticket"))</strong><span>@order.OrderItems.Sum(item => item.Quantity) ticket@(order.OrderItems.Sum(item => item.Quantity) == 1 ? "" : "s")</span></div>
+                    <div class="order-history-date"><span>Booked on</span><strong>@order.OrderDate.ToLocalTime().ToString("MMM dd, yyyy")</strong></div>
+                    <strong class="order-history-total">@order.TotalPrice.ToString("C")</strong>
+                    <a class="order-history-view" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" aria-label="View booking #ET-@order.Id.ToString("D6")"><i class="bi bi-arrow-up-right"></i></a>
+                </article>
+            }
+        </div>
+    }
+</section>
