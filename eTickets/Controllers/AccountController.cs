@@ -1,4 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using eTickets.Data.Models;
+using eTickets.Business.Interfaces;
 
 namespace eTickets.Controllers
 {
@@ -6,11 +10,16 @@ namespace eTickets.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IShoppingCartService shoppingCartService;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IShoppingCartService shoppingCartService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.shoppingCartService = shoppingCartService;
         }
 
         [HttpGet]
@@ -35,6 +44,10 @@ namespace eTickets.Controllers
             {
                 await userManager.AddToRoleAsync(user, "Customer");
                 await signInManager.SignInAsync(user, isPersistent: false);
+
+                // Merge guest/session cart into the new user's cart
+                await shoppingCartService.MergeCartAsync(user.Id);
+
                 return LocalRedirect(GetSafeReturnUrl(returnUrl));
             }
 
@@ -59,7 +72,15 @@ namespace eTickets.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
-            if (result.Succeeded) return LocalRedirect(GetSafeReturnUrl(returnUrl));
+            if (result.Succeeded)
+            {
+                // Resolve user id and merge session cart into user's cart
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                    await shoppingCartService.MergeCartAsync(user.Id);
+
+                return LocalRedirect(GetSafeReturnUrl(returnUrl));
+            }
             if (result.IsLockedOut) ModelState.AddModelError(string.Empty, "This account is temporarily locked. Please try again later.");
             else ModelState.AddModelError(string.Empty, "Invalid email or password.");
             return View(model);

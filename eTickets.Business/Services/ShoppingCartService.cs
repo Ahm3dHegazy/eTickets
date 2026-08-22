@@ -1,8 +1,8 @@
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 using eTickets.Business.Interfaces;
 using eTickets.Data;
-using eTickets.Data.Extensions;
 using eTickets.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +79,92 @@ namespace eTickets.Business.Services
             context.SaveChanges();
         }
 
+        public async Task MergeCartAsync(string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId)) return;
+
+            var session = httpContextAccessor.HttpContext?.Session
+                ?? throw new InvalidOperationException("Session is not available.");
+
+            // 1) Merge any DB-backed session cart (session:{session.Id}) into the user's cart
+            var sessionCartKey = $"session:{session.Id}";
+            var userCartKey = $"user:{userId}";
+
+            var sessionCart = await context.Carts
+                .Include(c => c.Items)
+                .SingleOrDefaultAsync(c => c.CartKey == sessionCartKey);
+
+            var userCart = await context.Carts
+                .Include(c => c.Items)
+                .SingleOrDefaultAsync(c => c.CartKey == userCartKey);
+
+            if (sessionCart != null && sessionCart.Items.Count > 0)
+            {
+                if (userCart == null)
+                {
+                    userCart = new Cart { CartKey = userCartKey, CreatedAt = DateTime.UtcNow };
+                    context.Carts.Add(userCart);
+                }
+
+                foreach (var item in sessionCart.Items.ToList())
+                {
+                    var existing = userCart.Items.FirstOrDefault(i => i.MovieId == item.MovieId);
+                    if (existing != null)
+                    {
+                        existing.Quantity += item.Quantity;
+                        // keep existing.Price or choose to overwrite: existing.Price = item.Price;
+                    }
+                    else
+                    {
+                        userCart.Items.Add(new ShoppingCartItem
+                        {
+                            MovieId = item.MovieId,
+                            MovieName = item.MovieName,
+                            MovieImageURL = item.MovieImageURL,
+                            Price = item.Price,
+                            Quantity = item.Quantity
+                        });
+                    }
+                }
+
+                // remove the session cart and its items
+                context.ShoppingCartItems.RemoveRange(sessionCart.Items);
+                context.Carts.Remove(sessionCart);
+
+                userCart.UpdatedAt = DateTime.UtcNow;
+                await context.SaveChangesAsync();
+            }
+
+            // 2) Also handle older JSON-based legacy session storage (if present)
+            var legacyItems = ReadLegacyItems(session);
+            if (legacyItems != null && legacyItems.Count > 0)
+            {
+                userCart ??= new Cart { CartKey = userCartKey, CreatedAt = DateTime.UtcNow };
+                if (context.Entry(userCart).State == EntityState.Detached)
+                    context.Carts.Add(userCart);
+
+                foreach (var legacyItem in legacyItems)
+                {
+                    var existing = userCart.Items.FirstOrDefault(i => i.MovieId == legacyItem.MovieId);
+                    if (existing != null)
+                        existing.Quantity += legacyItem.Quantity;
+                    else
+                        userCart.Items.Add(new ShoppingCartItem
+                        {
+                            MovieId = legacyItem.MovieId,
+                            MovieName = legacyItem.MovieName,
+                            MovieImageURL = legacyItem.MovieImageURL,
+                            Price = legacyItem.Price,
+                            Quantity = legacyItem.Quantity
+                        });
+                }
+
+                userCart.UpdatedAt = DateTime.UtcNow;
+                await context.SaveChangesAsync();
+                session.Remove(LegacySessionKey);
+            }
+        }
+
         private Cart? GetCart(bool createIfMissing)
         {
             var session = httpContextAccessor.HttpContext?.Session
@@ -119,15 +205,28 @@ namespace eTickets.Business.Services
         private string GetCartKey(ISession session)
         {
             var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return string.IsNullOrWhiteSpace(userId) ? $"session:{session.Id}" : $"user:{userId}";
+            if (!string.IsNullOrWhiteSpace(userId))
+                return $"user:{userId}";
+
+            if (!session.TryGetValue("CartSessionStarted", out _))
+            {
+                session.Set("CartSessionStarted", Encoding.UTF8.GetBytes("1"));
+            }
+
+            return $"session:{session.Id}";
         }
 
         private static List<ShoppingCartItem> ReadLegacyItems(ISession session)
         {
-            var data = session.GetString(LegacySessionKey);
-            return string.IsNullOrWhiteSpace(data)
-                ? new List<ShoppingCartItem>()
-                : JsonSerializer.Deserialize<List<ShoppingCartItem>>(data) ?? new List<ShoppingCartItem>();
+            if (session.TryGetValue(LegacySessionKey, out var bytes))
+            {
+                var data = Encoding.UTF8.GetString(bytes);
+                return string.IsNullOrWhiteSpace(data)
+                    ? new List<ShoppingCartItem>()
+                    : JsonSerializer.Deserialize<List<ShoppingCartItem>>(data) ?? new List<ShoppingCartItem>();
+            }
+
+            return new List<ShoppingCartItem>();
         }
     }
 }

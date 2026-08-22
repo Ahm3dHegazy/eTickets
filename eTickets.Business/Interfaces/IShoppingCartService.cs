@@ -10,5 +10,8 @@ namespace eTickets.Business.Interfaces
         decimal GetTotal();
         int GetCount();
         void ClearCart();
+
+        // Merge any guest/session cart items into the authenticated user's cart after sign-in
+        Task MergeCartAsync(string userId);
     }
 }
