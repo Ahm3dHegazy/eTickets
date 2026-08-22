@@ -1,0 +1,37 @@
+﻿@model ErrorViewModel
+@{
+    var code = Model.StatusCode ?? 500;
+    ViewData["Title"] = code == 404 ? "Page not found" : "Error";
+}
+
+<div class="container py-5">
+    @if (code == 404)
+    {
+        <div class="text-center">
+            <h1 class="display-4">Page not found</h1>
+            <p class="lead">We couldn't find the page you were looking for.</p>
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Return home</a>
+            <p class="mt-3 text-muted">If you think this is an error, contact support.</p>
+        </div>
+    }
+    else
+    {
+        <div>
+            <h1 class="text-danger">Something went wrong</h1>
+            <p class="lead">An unexpected error occurred while processing your request.</p>
+
+            @if (Model.ShowRequestId)
+            {
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                    </div>
+                </div>
+            }
+
+            <div class="mt-3">
+                <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back to home</a>
+            </div>
+        </div>
+    }
+</div>
