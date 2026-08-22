@@ -11,13 +11,6 @@ namespace eTickets.Data.Data
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            // Apply migrations (if using migrations)
-            // context.Database.Migrate();
-
-            // Only seed a completely empty database. Once any cinema exists,
-            // assume the app (and its admin) owns the data from here on and
-            // never touch it again on startup. This avoids re-adding records
-            // that an admin has deliberately deleted.
             if (context.Cinemas.Any())
             {
                 return;

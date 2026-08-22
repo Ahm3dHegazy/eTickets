@@ -20,7 +20,7 @@
             <div class="order-ticket-row">
                 <img src="@(string.IsNullOrWhiteSpace(item.Movie?.ImageURL) ? Url.Content("~/images/movies/placeholder.png") : item.Movie.ImageURL)" alt="@item.Movie?.Name" />
                 <div><strong>@(item.Movie?.Name ?? "Movie ticket")</strong><span>@item.Quantity ticket@(item.Quantity == 1 ? "" : "s") · @item.UnitPrice.ToString("C") each</span></div>
-                <b>@(item.UnitPrice * item.Quantity).ToString("C")</b>
+                <b>@((item.UnitPrice * item.Quantity).ToString("C"))</b>
             </div>
         }
         <div class="order-total-row"><span>Total paid</span><strong>@Model.TotalPrice.ToString("C")</strong></div>
