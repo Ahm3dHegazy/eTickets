@@ -298,4 +298,53 @@
         padding: 1.5rem;
     }
 }
+/* Add these styles (append near other movie-card styles) */
+
+.home-movie-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border-radius: 1rem;
+    /* allow focus outline without clipping */
+    -webkit-tap-highlight-color: transparent;
+}
+
+    .home-movie-link:focus-visible {
+        outline: 3px solid rgba(255, 115, 121, 0.28);
+        outline-offset: 4px;
+        border-radius: 1rem;
+    }
+
+    .home-movie-link .home-movie-card {
+        transition: transform .22s ease, box-shadow .22s ease;
+        will-change: transform;
+    }
+
+    .home-movie-link:hover .home-movie-card,
+    .home-movie-link:focus .home-movie-card {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+    }
+
+.movie-card-action {
+    color: #ff7379;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .18s ease;
+}
+
+.home-movie-link:hover .movie-card-action,
+.home-movie-link:focus .movie-card-action {
+    transform: translateX(6px);
+}
+
+/* keep image zoom behavior working with the new structure */
+.home-movie-card > img {
+    transition: transform .35s;
+}
+
+.home-movie-card:hover > img {
+    transform: scale(1.05);
+}
 

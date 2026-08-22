@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 
 namespace eTickets
 {
@@ -60,7 +61,7 @@ namespace eTickets
             builder.Services.AddScoped<IActorMoviesService, ActorMoviesService>();
             builder.Services.AddScoped<IOrdersService, OrdersService>();
             builder.Services.AddScoped<IMovieReviewsService, MovieReviewsService>();
-
+            
 
             var app = builder.Build();
 
@@ -71,10 +72,15 @@ namespace eTickets
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
+                // Unhandled exceptions => Home/Error (controller action will log details)
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days.
                 app.UseHsts();
             }
+
+            // Map non-success status codes (e.g. 404) to Home/Error/{statusCode}
+            // This ensures 404 and other status codes are handled by the Home/Error action.
+            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
             app.UseHttpsRedirection();
 
