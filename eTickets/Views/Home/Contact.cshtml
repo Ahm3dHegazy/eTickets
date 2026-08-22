@@ -1,0 +1,70 @@
+﻿@model ContactViewModel
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="contact-shell">
+    <div class="contact-intro">
+        <p class="contact-kicker">Get in touch</p>
+        <h1 class="contact-title">Contact Us</h1>
+        <p class="contact-lead">
+            Questions about an order, an account issue, or just want to say hi?
+            Send us a message and we'll get back to you as soon as we can.
+        </p>
+
+        <div class="contact-info">
+            <div class="contact-info-item">
+                <i class="bi bi-envelope"></i>
+                <div>
+                    <span>Email</span>
+                    <a href="mailto:support@etickets.com">support@etickets.com</a>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <i class="bi bi-clock"></i>
+                <div>
+                    <span>Response time</span>
+                    <strong>Within 1-2 business days</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-card">
+        <form asp-controller="Home" asp-action="Contact" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="contact-validation-summary"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Your name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Subject" class="form-label"></label>
+                <input asp-for="Subject" class="form-control" placeholder="What's this about?" />
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Message" class="form-label"></label>
+                <textarea asp-for="Message" class="form-control" rows="5" placeholder="Tell us more..."></textarea>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-cinema w-100">Send message</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
