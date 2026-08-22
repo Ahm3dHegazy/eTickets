@@ -114,3 +114,104 @@ a {
         color: #c5c1be;
         font-size: 1.2rem;
     }
+.policy-shell {
+    max-width: 820px;
+    margin: 2rem auto 3rem;
+}
+
+.policy-card {
+    background: linear-gradient(145deg,#1d1d1d,#141414);
+    border: 1px solid #303030;
+    border-radius: 1.1rem;
+    padding: clamp(1.75rem,4vw,3rem);
+    box-shadow: 0 20px 60px #0006;
+}
+
+.policy-kicker {
+    color: #ff8b91;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.policy-title {
+    margin: .5rem 0 .25rem;
+    font-size: clamp(2.2rem,5vw,3rem);
+    color: #fff;
+}
+
+.policy-updated {
+    color: #888;
+    font-size: .85rem;
+    margin: 0 0 2rem;
+}
+
+.policy-section {
+    padding: 1.4rem 0;
+    border-top: 1px solid #2a2a2a;
+}
+
+    .policy-section h2 {
+        color: #fff;
+        font-size: 1.35rem;
+        margin: 0 0 .6rem;
+    }
+
+    .policy-section p {
+        color: #aaa;
+        line-height: 1.75;
+        margin: 0;
+    }
+
+    .policy-section a {
+        color: #ff858b;
+        text-decoration: none;
+    }
+
+        .policy-section a:hover {
+            text-decoration: underline;
+        }
+
+@media (max-width:575px) {
+    .policy-shell {
+        margin: 1rem auto 2rem;
+    }
+
+    .policy-card {
+        border-radius: 0;
+        margin: 0 -12px;
+    }
+}
+.dropdown-menu.dropdown-menu-dark {
+    background: #171717;
+    border: 1px solid #303030;
+    border-radius: .7rem;
+    padding: .4rem;
+    box-shadow: 0 20px 45px rgba(0,0,0,.45);
+}
+
+    .dropdown-menu.dropdown-menu-dark .dropdown-item {
+        color: #ddd;
+        border-radius: .5rem;
+        padding: .55rem .9rem;
+        font-weight: 500;
+    }
+
+        .dropdown-menu.dropdown-menu-dark .dropdown-item:hover,
+        .dropdown-menu.dropdown-menu-dark .dropdown-item:focus {
+            background: #3a1216;
+            color: #fff;
+        }
+
+        .dropdown-menu.dropdown-menu-dark .dropdown-item.active,
+        .dropdown-menu.dropdown-menu-dark .dropdown-item:active {
+            background: #3a1216;
+            color: #fff;
+        }
+
+    .dropdown-menu.dropdown-menu-dark .dropdown-divider {
+        border-color: #303030;
+        margin: .4rem 0;
+    }
