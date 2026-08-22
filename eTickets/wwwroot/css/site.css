@@ -215,3 +215,115 @@ a {
         border-color: #303030;
         margin: .4rem 0;
     }
+.contact-shell {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 2.5rem;
+    max-width: 960px;
+    margin: 2rem auto 3rem;
+    align-items: start;
+}
+
+.contact-kicker {
+    color: #ff8b91;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.contact-title {
+    margin: .5rem 0 .75rem;
+    font-size: clamp(2.2rem,5vw,3rem);
+    color: #fff;
+}
+
+.contact-lead {
+    color: #aaa;
+    line-height: 1.75;
+    max-width: 420px;
+}
+
+.contact-info {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+}
+
+    .contact-info-item i {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #e5091414;
+        border: 1px solid #783035;
+        color: #ff858b;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+    }
+
+    .contact-info-item span {
+        display: block;
+        color: #888;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .contact-info-item a,
+    .contact-info-item strong {
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .contact-info-item a:hover {
+            color: #ff858b;
+        }
+
+.contact-card {
+    background: linear-gradient(145deg,#1d1d1d,#141414);
+    border: 1px solid #303030;
+    border-radius: 1.1rem;
+    padding: clamp(1.5rem,4vw,2.25rem);
+    box-shadow: 0 20px 60px #0006;
+}
+
+.contact-validation-summary ul {
+    margin: 0 0 1rem;
+    padding-left: 1.1rem;
+    color: #ff9da1;
+    font-size: .85rem;
+}
+
+.contact-validation-summary:empty {
+    display: none;
+}
+
+@media (max-width:768px) {
+    .contact-shell {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width:575px) {
+    .contact-shell {
+        margin: 1rem auto 2rem;
+    }
+
+    .contact-card {
+        border-radius: 0;
+        margin: 0 -12px;
+    }
+}
