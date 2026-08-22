@@ -18,16 +18,17 @@
             @(string.IsNullOrWhiteSpace(selectedCategory) ? "Movies" : $"{selectedCategory} Movies")
         </h2>
 
-        <a asp-controller="Movies"
-           asp-action="Add"
-           class="btn-add-movie">
+        @if (User.IsInRole("Administrator"))
+        {
+            <a asp-controller="Movies"
+               asp-action="Add"
+               class="btn-add-movie">
+                <i class="bi bi-plus-lg"></i>
 
-            <i class="bi bi-plus-lg"></i>
-
-            Add New Movie
-
-        </a>
-
+                Add New Movie
+            </a>
+        }
+      
     </div>
 
     @if (Model == null || !Model.Any())
@@ -48,17 +49,14 @@
                 <div class="col">
 
                     <div class="movie-card">
-
-                        
+                         
                         <div class="movie-poster">
 
                             <img src="@(string.IsNullOrEmpty(movie.ImageURL)
                                                             ? Url.Content("~/images/movies/placeholder.png")
                                                             : movie.ImageURL)"
                                  alt="@movie.Name" />
-
-
-                            
+ 
                             @if (DateTime.Now < movie.StartDate)
                             {
                                 <span class="movie-status status-upcoming">
@@ -76,32 +74,24 @@
                                 <span class="movie-status status-ended">
                                     ENDED
                                 </span>
-                            }
-
+                            } 
                             <span class="poster-rating" aria-label="@(reviewCount == 0 ? "No ratings yet" : $"{averageRating:0.0} out of 5 stars from {reviewCount} reviews")">
                                 <i class="bi bi-star-fill"></i>
                                 @(reviewCount == 0 ? "New" : averageRating.ToString("0.0"))
                             </span>
 
                         </div>
-
-
-                        
+                         
                         <div class="movie-card-body">
-
-                            
+                             
                             <h5 class="movie-name">
                                 @movie.Name
                             </h5>
-
-
-                           
+                             
                             <div class="movie-category">
                                 @movie.MovieCategory
                             </div>
-
-
-                          
+                             
                             <p class="movie-description">
 
                                 @{
@@ -117,11 +107,8 @@
                                     : preview)
 
                             </p>
-
-
                              
                             <div class="movie-info">
-
                                  
                                 <div class="movie-info-item">
 
@@ -133,9 +120,7 @@
                                     </span>
 
                                 </div>
-
-
-                                
+                                 
                                 <div class="movie-info-item">
 
                                     <i class="bi bi-person"></i>
@@ -146,8 +131,6 @@
                                     </span>
 
                                 </div>
-
-
                                  
                                 <div class="movie-info-item">
 
@@ -159,8 +142,6 @@
                                     </span>
 
                                 </div>
-
-
                                  
                                 <div class="movie-info-item">
 
@@ -174,16 +155,12 @@
                                 </div>
 
                             </div>
-
-
                              
                             <div class="movie-price">
 
                                 @movie.Price.ToString("C")
 
                             </div>
-
-
                              
                             <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post" class="d-inline">
                                 <input type="hidden" name="movieId" value="@movie.Id" />
@@ -191,10 +168,7 @@
                                     <i class="bi bi-cart-plus"></i>
                                     Add to Cart
                                 </button>
-                            </form>
-
-
-                             
+                            </form> 
                             <div class="movie-actions">
                                 <a asp-controller="Movies"
                                    asp-action="Details"
