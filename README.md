@@ -1,129 +1,331 @@
-🎬 eTickets - Cinema Ticketing Web App
-A full-featured cinema ticketing web application built with ASP.NET Core MVC and Entity Framework Core. Visitors can browse movies, read and write reviews, fill a shopping cart, and pay securely via PayPal. Administrators have full control over catalog management and order history.
+# 🎬 eTickets
+
+> A cinema ticketing web application built with ASP.NET Core MVC, Entity Framework Core, and SQL Server.
+> Supports movie discovery, shopping cart management, PayPal checkout, customer reviews, and role-based administration.
+
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com)
+[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-MVC-512BD4?logo=dotnet)](https://dotnet.microsoft.com/apps/aspnet)
+[![SQL Server](https://img.shields.io/badge/Database-SQL%20Server-CC2927?logo=microsoftsqlserver)](https://www.microsoft.com/en-us/sql-server)
+[![PayPal](https://img.shields.io/badge/Payments-PayPal-003087?logo=paypal)](https://developer.paypal.com/)
+
 ---
-📋 Table of Contents
-Features
-Tech Stack
-Project Structure
-Getting Started
-Roles & Permissions
-Author
+
+## Table of Contents
+
+* [Tech Stack](#tech-stack)
+* [Features](#features)
+* [Screenshots](#screenshots)
+* [Architecture](#architecture)
+* [Getting Started](#getting-started)
+
+  * [Prerequisites](#prerequisites)
+  * [Clone the Repository](#1-clone-the-repository)
+  * [Configure the Database](#2-configure-the-database)
+  * [Apply Migrations](#3-apply-database-migrations)
+  * [Configure Administrator Account](#4-configure-administrator-account)
+  * [Configure PayPal](#5-configure-paypal)
+  * [Run the Application](#6-run-the-application)
+* [Roles & Permissions](#roles--permissions)
+* [Project Structure](#project-structure)
+* [Author](#author)
+
 ---
-✨ Features
-🌐 For Everyone (Guests & Users)
-Browse & Search: Explore movies, filter by category, and search by title.
-Detailed Pages: Dedicated view pages for movies (including cast, producer, cinema, price, showing dates, and user reviews), actors, producers, and cinemas.
-Shopping Cart: Session-based cart functionality (works for guests, supports quantity updates or item removal).
-Error Handling: Contact page and custom-themed error pages (404 and general errors).
-👤 For Signed-in Customers
-Authentication: Account registration and login managed via ASP.NET Core Identity.
-Checkout Integration: PayPal integration supporting the Create & Capture order flow.
-Order History: View personal order history, order details, and profile page.
-Reviews & Ratings: Leave a 1–5 star rating with an optional comment, and delete personal reviews.
-🔐 For Administrators
-Catalog Management: Complete CRUD (Create, Read, Update, Delete) operations for movies, actors, producers, and cinemas.
-Order Management: View and delete any order in the system.
-Review Moderation: Ability to delete any user review across the platform.
-🛡️ Security Highlights
-Role-Based Authorization: `Administrator` and `Customer` roles (new registrations default to `Customer`).
-Password Policy: Minimum 8 characters, requiring at least one digit, uppercase, and lowercase letter.
-Account Protection: Unique email enforcement and a 15-minute lockout after 5 failed login attempts.
-Security Tokens: `HttpOnly` and secure-only authentication cookies, plus Anti-Forgery tokens on cart, review, contact, and checkout POST actions.
+
+## Tech Stack
+
+| Layer               | Technology                         |
+| ------------------- | ---------------------------------- |
+| Framework           | ASP.NET Core 10 MVC                |
+| Language            | C#                                 |
+| ORM                 | Entity Framework Core 8            |
+| Database            | Microsoft SQL Server               |
+| Authentication      | ASP.NET Core Identity              |
+| Authorization       | Role-based authorization           |
+| Mapping             | AutoMapper                         |
+| Payments            | PayPal REST API                    |
+| Frontend            | Razor Views, HTML, CSS, JavaScript |
+| UI Framework        | Bootstrap 5                        |
+| Icons               | Bootstrap Icons                    |
+| Database Management | EF Core Code-First Migrations      |
+| Configuration       | .NET User Secrets                  |
+
 ---
-🛠️ Tech Stack
-Area	Technology
-Framework	ASP.NET Core MVC (.NET 10)
-Data Access	Entity Framework Core 8 (SQL Server), Code-First Migrations
-Authentication	ASP.NET Core Identity with Role Management
-Mapping	AutoMapper
-Payment Gateway	PayPal REST API (Sandbox by default)
-Front End	Razor Views, Bootstrap, Bootstrap Icons, Custom CSS
+
+## Features
+
+* **User Authentication** - registration, login, and profile management using ASP.NET Core Identity
+* **Movie Catalog** - browse movies, filter by category, and search by name
+* **Movie Details** - view cast, producer, cinema, price, showing dates, and customer reviews
+* **Actors & Producers** - dedicated listing and details pages
+* **Cinema Management** - browse cinemas and view their details
+* **Shopping Cart** - session-based cart with quantity updates and item removal
+* **PayPal Checkout** - payment processing using PayPal's order creation and capture flow
+* **Order Management** - customer order history, order details, and administrator order management
+* **Movie Reviews** - submit 1–5 star ratings with optional comments
+* **Review Moderation** - customers can delete their own reviews; administrators can delete any review
+* **Admin Management** - create, edit, and delete movies, actors, producers, and cinemas
+* **Role-Based Access** - separate permissions for guests, customers, and administrators
+* **Security** - account lockout, password requirements, secure authentication cookies, and antiforgery protection
+* **Custom Error Pages** - dedicated 404 and general error pages
+* **Contact Page** - a page for users to contact the application team
+
 ---
-📁 Project Structure
-The solution (`eTickets.slnx`) is split into three main projects following a clean layered architecture:
+
+## Screenshots
+
+| Home Page | Movies Page |
+|---|---|
+| ![Home Page](screenshots/HomePage.png) | ![Movies Page](screenshots/MoviesPage.png) |
+
+| Movie Details | Shopping Cart |
+|---|---|
+| ![Movie Details](screenshots/MovieDetails.png) | ![Shopping Cart](screenshots/ShoppingCart.png) |
+
+| Admin Dashboard |
+|---|---|
+
+| Actors Management | Cinemas Management |
+|:---:|:---:|
+| ![Actors Management](screenshots/AdminActors.png) | ![Cinemas Management](screenshots/AdminCinemas.png) |
+
+### Producers Management
+
+<p align="center">
+  <img src="screenshots/AdminProducers.png" alt="Producers Management" width="80%">
+</p>
+
+---
+
+## Architecture
+
+The solution follows a three-layer architecture to separate presentation, business logic, and data access.
+
 ```text
-eTickets/                   # Web Project (MVC)
-├── Controllers/            # Home, Movies, Actors, Producers, Cinemas, ShoppingCart, Orders, MovieReviews, Account
-├── Views/                  # Razor views per controller + Shared layouts
-├── ViewModels/             # Request models (Create/Edit/Login/Register/PayPal)
-├── Services/               # PayPalService implementation
-├── Configuration/          # PayPalOptions configuration
-├── Mapping/                # AutoMapper profile
-└── wwwroot/                # Static files (CSS, JS, Libraries, Images)
-
-eTickets.Business/          # Business Layer
-├── Interfaces/             # IMoviesService, IOrdersService, IShoppingCartService, etc.
-└── Services/               # Business logic implementations
-
-eTickets.Data/              # Data Layer
-├── Models/                 # Entities (Movie, Actor, Producer, Cinema, Order, OrderItem, MovieReview, ShoppingCart, ApplicationUser)
-├── Configurations/         # EF Core entity configurations
-├── Repository/             # Generic entity base repository
-├── Migrations/             # EF Core database migrations
-└── Data/                   # AppDbContext, Sample Data Seeder, Identity/Role Seeder
+┌─────────────────────────────────┐
+│            eTickets             │
+│        Presentation Layer       │
+│                                 │
+│   Controllers, Views, Services  │
+└────────────────┬────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────┐
+│        eTickets.Business        │
+│          Business Layer         │
+│                                 │
+│      Interfaces & Services      │
+└────────────────┬────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────┐
+│          eTickets.Data          │
+│           Data Layer            │
+│                                 │
+│ Models, Repositories, DbContext │
+│ Configurations & Migrations     │
+└────────────────┬────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────┐
+│           SQL Server            │
+└─────────────────────────────────┘
 ```
-> **Dependency Flow:** `eTickets` ➔ `eTickets.Business` ➔ `eTickets.Data`
+
 ---
-🚀 Getting Started
-Prerequisites
-.NET 10 SDK
-SQL Server (LocalDB, Express, or Full Instance) reachable from your machine
-The EF Core CLI tool:
+
+## Getting Started
+
+### Prerequisites
+
+* [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+* SQL Server, SQL Server Express, or LocalDB
+* [Git](https://git-scm.com/)
+* Entity Framework Core CLI
+
+Install the EF Core CLI if it is not already installed:
+
 ```bash
-  dotnet tool install --global dotnet-ef
-  ```
----
-Step-by-Step Installation
-1. Clone the Repository
+dotnet tool install --global dotnet-ef
+```
+
+### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Ahm3dHegazy/eTickets.git
 cd eTickets
 ```
-2. Configure the Database Connection
-The default connection string in `eTickets/appsettings.json` points to a local SQL Server instance using Windows authentication:
+
+### 2. Configure the Database
+
+The default connection string in `eTickets/appsettings.json` uses a local SQL Server instance with Windows authentication:
+
 ```text
 Server=.;Database=eTickets;Integrated Security=True;TrustServerCertificate=True;
 ```
-If your SQL Server configuration differs, override it using User Secrets (without modifying tracked files):
+
+If your SQL Server instance uses a different configuration, set your connection string using .NET User Secrets:
+
 ```bash
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your connection string>" --project eTickets
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your-connection-string>" --project eTickets
 ```
-3. Apply Database Migrations
-Run the migrations once to set up the database schema and seed initial lookup data (cinemas, producers, actors, movies, and default roles):
+
+Replace `<your-connection-string>` with your actual SQL Server connection string.
+
+### 3. Apply Database Migrations
+
+Run the following command from the solution root:
+
 ```bash
 dotnet ef database update --project eTickets.Data --startup-project eTickets
 ```
-4. Create an Admin Account (Optional)
-An initial administrator user is created at startup when both secret values are configured:
+
+This creates or updates the database using the existing Entity Framework Core migrations.
+
+On the first application run, the application seeds sample cinemas, producers, actors, and movies if no cinemas exist. It also creates the `Administrator` and `Customer` roles.
+
+### 4. Configure Administrator Account
+
+The application creates an administrator account at startup only when both settings are configured.
+
+Set the administrator email:
+
 ```bash
 dotnet user-secrets set "SeedAdmin:Email" "admin@example.com" --project eTickets
+```
+
+Set the administrator password:
+
+```bash
 dotnet user-secrets set "SeedAdmin:Password" "YourStrongPassword1" --project eTickets
 ```
-(Ensure the password satisfies the minimum password policy requirements).
-5. Configure PayPal (For Checkout)
-Create a sandbox application in the PayPal Developer Dashboard and register its credentials:
+
+The password must meet the application's password requirements:
+
+* At least 8 characters
+* At least one digit
+* At least one uppercase letter
+* At least one lowercase letter
+
+**Important:** Never commit real credentials or passwords to source control.
+
+### 5. Configure PayPal
+
+PayPal sandbox credentials are required to test the checkout process.
+
+**1.** Create a sandbox application in the [PayPal Developer Dashboard](https://developer.paypal.com/).
+
+**2.** Configure your Client ID:
+
 ```bash
-dotnet user-secrets set "PayPal:ClientId" "<sandbox client id>" --project eTickets
-dotnet user-secrets set "PayPal:ClientSecret" "<sandbox client secret>" --project eTickets
+dotnet user-secrets set "PayPal:ClientId" "<sandbox-client-id>" --project eTickets
 ```
-Setting	Default Value	Description
-`PayPal:UseSandbox`	`true`	Set to `false` to use the live PayPal API
-`PayPal:Currency`	`USD`	Target currency used for orders
-> **Note:** All features except checkout function properly without PayPal credentials configured.
-6. Run the Application
+
+**3.** Configure your Client Secret:
+
+```bash
+dotnet user-secrets set "PayPal:ClientSecret" "<sandbox-client-secret>" --project eTickets
+```
+
+### PayPal Settings
+
+| Setting               | Default        | Description                      |
+| --------------------- | -------------- | -------------------------------- |
+| `PayPal:UseSandbox`   | `true`         | Enables PayPal sandbox mode      |
+| `PayPal:Currency`     | `USD`          | Currency used for orders         |
+| `PayPal:ClientId`     | Not configured | PayPal application Client ID     |
+| `PayPal:ClientSecret` | Not configured | PayPal application Client Secret |
+
+The application uses PayPal's order creation and capture flow.
+
+Other features can be explored without configuring PayPal, but checkout requires valid credentials.
+
+### 6. Run the Application
+
+Run the application using the HTTPS launch profile:
+
 ```bash
 dotnet run --project eTickets --launch-profile https
 ```
-Then open `https://localhost:7001` in your browser (an HTTP profile is also available on `http://localhost:5080`).
-> **Note:** Authentication cookies are marked as secure-only, so always use the **HTTPS** profile when testing sign-in and authentication flow.
+
+Open the application in your browser:
+
+* **HTTPS:** `https://localhost:7001`
+* **HTTP:** `http://localhost:5080`
+
+These URLs assume the corresponding ports are configured in `launchSettings.json`.
+
+Use HTTPS when testing authentication because authentication cookies are configured as secure-only.
+
 ---
-👥 Roles & Permissions
-Action	Guest	Customer	Administrator
-Browse & search movies, actors, producers, cinemas	✅	✅	✅
-Use shopping cart	✅	✅	✅
-Checkout, view personal orders, write reviews	❌	✅	✅
-Add, edit, and delete catalog items	❌	❌	✅
-View all orders & delete orders	❌	❌	✅
+
+## Roles & Permissions
+
+| Feature                                       | Guest | Customer | Administrator |
+| --------------------------------------------- | :---: | :------: | :-----------: |
+| Browse and search movies                      |   ✅   |     ✅    |       ✅       |
+| Browse actors, producers, and cinemas         |   ✅   |     ✅    |       ✅       |
+| Use shopping cart                             |   ✅   |     ✅    |       ✅       |
+| Checkout with PayPal                          |   ❌   |     ✅    |       ✅       |
+| View personal order history                   |   ❌   |     ✅    |       ✅       |
+| Submit movie reviews                          |   ❌   |     ✅    |       ✅       |
+| Delete own reviews                            |   ❌   |     ✅    |       ✅       |
+| Manage movies, actors, producers, and cinemas |   ❌   |     ❌    |       ✅       |
+| View all customer orders                      |   ❌   |     ❌    |       ✅       |
+| Delete orders                                 |   ❌   |     ❌    |       ✅       |
+| Delete any review                             |   ❌   |     ❌    |       ✅       |
+
 ---
-👤 Author
-Ahmed Abdel Samea Hegazy - @Ahm3dHegazy
+
+## Project Structure
+
+```text
+eTickets/
+│
+├── eTickets/                       # ASP.NET Core MVC application
+│   ├── Controllers/                # MVC request handlers
+│   ├── Views/                      # Razor views
+│   ├── ViewModels/                 # View and request models
+│   ├── Services/                   # PayPal integration
+│   ├── Configuration/              # PayPal options
+│   ├── Mapping/                    # AutoMapper profiles
+│   ├── wwwroot/                    # CSS, JavaScript, images, libraries
+│   ├── appsettings.json            # Application configuration
+│   └── Program.cs                  # Application entry point
+│
+├── eTickets.Business/              # Business logic layer
+│   ├── Interfaces/                 # Service contracts
+│   └── Services/                   # Service implementations
+│
+├── eTickets.Data/                  # Data access layer
+│   ├── Models/                     # Entity models
+│   ├── Configurations/             # EF Core entity configurations
+│   ├── Repository/                 # Repository implementations
+│   ├── Migrations/                 # Database migrations
+│   └── Data/                       # DbContext and seeders
+│
+└── eTickets.slnx                   # Solution file
+```
+
+---
+
+## Security Notes
+
+* Keep PayPal credentials and administrator passwords out of source control.
+* Use .NET User Secrets for local development.
+* Use HTTPS when testing authentication.
+* Use sandbox credentials for PayPal testing.
+* Configure production credentials through your deployment environment rather than committing secrets to `appsettings.json`.
+
+---
+
+## Author
+
+**Ahmed Abdel Samea Hegazy**
+
+* GitHub: [@Ahm3dHegazy](https://github.com/Ahm3dHegazy)
+
+---
+
+<p align="center">
+  Built with ❤️ using ASP.NET Core MVC
+</p>
