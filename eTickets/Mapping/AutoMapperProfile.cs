@@ -8,18 +8,15 @@ namespace eTickets.Mapping
         {
             CreateMap<CreateActorViewModel, Actor>();
 
-            CreateMap<EditActorViewModel, Actor>();
-            CreateMap<Actor, EditActorViewModel>();
+            CreateMap<EditActorViewModel, Actor>().ReverseMap();
 
             CreateMap<CreateProducerViewModel, Producer>();
 
-            CreateMap<EditProducerViewModel, Producer>();
-            CreateMap<Producer, EditProducerViewModel>();
+            CreateMap<EditProducerViewModel, Producer>().ReverseMap();
 
             CreateMap<CreateCinemaViewModel, Cinema>();
 
-            CreateMap<EditCinemaViewModel, Cinema>();
-            CreateMap<Cinema, EditCinemaViewModel>();
+            CreateMap<EditCinemaViewModel, Cinema>().ReverseMap();
 
             CreateMap<CreateMovieViewModel, Movie>()
        .ForMember(dest => dest.Actor_Movies, opt => opt.Ignore())

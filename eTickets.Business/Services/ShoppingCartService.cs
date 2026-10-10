@@ -32,8 +32,10 @@ namespace eTickets.Business.Services
             if (quantity <= 0) return;
 
             var cart = GetCart(createIfMissing: true)!;
+
             var existing = cart.Items.FirstOrDefault(item => item.MovieId == movieId);
-            if (existing != null)
+
+            if (existing != null)  // If the item already exists in the cart, update its quantity
                 existing.Quantity += quantity;
             else
             {

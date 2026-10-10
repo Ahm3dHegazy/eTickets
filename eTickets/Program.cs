@@ -61,8 +61,6 @@ namespace eTickets
             builder.Services.AddScoped<IActorMoviesService, ActorMoviesService>();
             builder.Services.AddScoped<IOrdersService, OrdersService>();
             builder.Services.AddScoped<IMovieReviewsService, MovieReviewsService>();
-            
-
             var app = builder.Build();
 
             // Ensure DB is seeded
