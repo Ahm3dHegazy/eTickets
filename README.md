@@ -73,26 +73,21 @@
 
 ## Screenshots
 
+### Movie Browsing
+
 | Home Page | Movies Page |
-|---|---|
-| ![Home Page](Screenshots/HomePage.png) | ![Movies Page](Screenshots/MoviesPage.png) |
+|:---:|:---:|
+| <img src="eTickets/Screenshots/HomePage.png" width="400" alt="Home Page"> | <img src="eTickets/Screenshots/MoviesPage.png" width="400" alt="Movies Page"> |
 
 | Movie Details | Shopping Cart |
-|---|---|
-| ![Movie Details](Screenshots/MovieDetails.png) | ![Shopping Cart](Screenshots/ShoppingCart.png) |
-
-| Admin Dashboard |
-|---|---|
-
-| Actors Management | Cinemas Management |
 |:---:|:---:|
-| ![Actors Management](Screenshots/AdminActors.png) | ![Cinemas Management](Screenshots/AdminCinemas.png) |
+| <img src="eTickets/Screenshots/MovieDetails.png" width="400" alt="Movie Details"> | <img src="eTickets/Screenshots/ShoppingCart.png" width="400" alt="Shopping Cart"> |
 
-### Producers Management
+### Admin Management
 
-<p align="center">
-  <img src="Screenshots/AdminProducers.png" alt="Producers Management" width="80%">
-</p>
+| Cinemas Management | Producers Management |
+|:---:|:---:|
+| <img src="eTickets/Screenshots/AdminCinemas.png" width="400" alt="Cinemas Management"> | <img src="eTickets/Screenshots/AdminProducers.png" width="400" alt="Producers Management"> |
 
 ---
 
