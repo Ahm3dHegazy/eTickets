@@ -75,23 +75,23 @@
 
 | Home Page | Movies Page |
 |---|---|
-| ![Home Page](screenshots/HomePage.png) | ![Movies Page](screenshots/MoviesPage.png) |
+| ![Home Page](Screenshots/HomePage.png) | ![Movies Page](Screenshots/MoviesPage.png) |
 
 | Movie Details | Shopping Cart |
 |---|---|
-| ![Movie Details](screenshots/MovieDetails.png) | ![Shopping Cart](screenshots/ShoppingCart.png) |
+| ![Movie Details](Screenshots/MovieDetails.png) | ![Shopping Cart](Screenshots/ShoppingCart.png) |
 
 | Admin Dashboard |
 |---|---|
 
 | Actors Management | Cinemas Management |
 |:---:|:---:|
-| ![Actors Management](screenshots/AdminActors.png) | ![Cinemas Management](screenshots/AdminCinemas.png) |
+| ![Actors Management](Screenshots/AdminActors.png) | ![Cinemas Management](Screenshots/AdminCinemas.png) |
 
 ### Producers Management
 
 <p align="center">
-  <img src="screenshots/AdminProducers.png" alt="Producers Management" width="80%">
+  <img src="Screenshots/AdminProducers.png" alt="Producers Management" width="80%">
 </p>
 
 ---
